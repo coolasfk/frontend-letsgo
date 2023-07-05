@@ -1,0 +1,1 @@
+1. add a function to not allow to register the same user twice ( + alert: this email already exists, log in or use another email)
