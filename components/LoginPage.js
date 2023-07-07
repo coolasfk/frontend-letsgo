@@ -101,11 +101,16 @@ const LoginPage = ({ navigation, cta }) => {
           width: width,
           alignItems: "left",
           marginLeft: 40,
+
           marginTop: 4,
         }}
       >
         <BackArrow onPress={goBack} />
       </View>
+      <Text style={[Style.headline, { marginTop: 5, marginBottom: 20 }]}>
+        Hope you still remember your details
+      </Text>
+
       <View>
         <View style={design.inputContainer}>
           <TextInput
@@ -151,6 +156,8 @@ const LoginPage = ({ navigation, cta }) => {
         }}
       >
         <ActionButton cta={"enter"} onPress={isUserInDBLogIn} />
+
+        <ActionButton cta={"oops I don't remember"} onPress={isUserInDBLogIn} />
       </View>
     </View>
   );
@@ -159,11 +166,11 @@ const LoginPage = ({ navigation, cta }) => {
 const design = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
-    // justifyItems: "center",
+    justifyItems: "center",
     alignItems: "center",
     justifyContent: "center",
     // borderWidth: 1,
-    margin: 10,
+    margin: 5,
     backgroundColor: Color.color3,
 
     borderRadius: 45,

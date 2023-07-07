@@ -14,6 +14,7 @@ import Style from "../style/Style";
 import React, { useEffect } from "react";
 import axios from "axios";
 import MyFriends from "./MyFriends";
+
 const NewFriends = () => {
   let {
     user,
@@ -30,25 +31,28 @@ const NewFriends = () => {
     setArrayWithMyFriendsId,
   } = UseContextHook();
 
-  const yes = (e) => {
-    elToAdd =
-      e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id;
-    let newArray = fetchedUsers.filter((el) => el.id !== elToAdd);
+  const yes = (id, newUser) => {
+    // elToAdd =
+    //   e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id;
+    let newArray = fetchedUsers.filter((el) => el.id !== id);
 
-    setArrayWithMyFriendsId([...arrayWithMyFriendsId, elToAdd]);
+    setArrayWithMyFriendsId([...arrayWithMyFriendsId, id]);
     setFetchedUsers(newArray);
+    putArrayWithMyFriendsIdOnTheServer(id);
+    setMyFriendsFetched((prev) => {
+      console.log({ prev });
+      prev.push(newUser);
+      console.log({ prev });
+      return [...prev];
+    });
     console.log("fetchedFriends", arrayWithMyFriendsId);
   };
 
-  useEffect(() => {
-    putArrayWithMyFriendsIdOnTheServer();
-  }, [arrayWithMyFriendsId]);
-
-  const putArrayWithMyFriendsIdOnTheServer = async () => {
+  const putArrayWithMyFriendsIdOnTheServer = async (id) => {
     try {
       const result = await axios.patch(
         `https://lestgo--coolasfk.repl.co/users/updateArrayFriends`,
-        { arrayWithMyFriendsId: arrayWithMyFriendsId }
+        { newFriend: id }
       );
 
       console.log("arrayWithMyFriendsId result", result.data);
@@ -59,15 +63,15 @@ const NewFriends = () => {
     }
   };
 
-  const no = (e) => {
-    console.log(
-      "e target",
-      e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id
-    );
-    elToRemoveId =
-      e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id;
-    let newArray = fetchedUsers.filter((el) => el.id !== elToRemoveId);
-    setpeopleIdontWannaSeeAgain([...peopleIdontWannaSeeAgain, elToRemoveId]);
+  const no = (id) => {
+    // console.log(
+    //   "e target",
+    //   e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id
+    // );
+    // elToRemoveId =
+    //   e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id;
+    let newArray = fetchedUsers.filter((el) => el.id !== id);
+    setpeopleIdontWannaSeeAgain([...peopleIdontWannaSeeAgain, id]);
     console.log("peopleIdontWannaSeeAgain", peopleIdontWannaSeeAgain);
     setFetchedUsers(newArray);
   };
@@ -89,112 +93,6 @@ const NewFriends = () => {
     }
   };
 
-  const Item = ({
-    id,
-    name,
-    age,
-    sports,
-    image,
-    location,
-    colorStars1,
-    colorStars2,
-    colorStars3,
-    colorStars4,
-    colorStars5,
-    colorStars6,
-    title,
-  }) => {
-    return (
-      <View style={styles.mainContainer}>
-        <Image
-          source={{ uri: image }}
-          style={{
-            width: 300,
-            height: 300,
-            borderRadius: 5,
-            margin: 30,
-            borderWidth: 0.8,
-            borderColor: Color.color1,
-          }}
-        />
-        <View style={styles.containerYesNo}>
-          <View id={id} onPress={no} style={styles.no}>
-            <AntDesign
-              id={id}
-              onPress={no}
-              name="close"
-              size={24}
-              color={Color.color9}
-            />
-          </View>
-          <View id={id} style={styles.yes} onPress={yes}>
-            <AntDesign
-              id={id}
-              onPress={yes}
-              name="check"
-              size={24}
-              color={Color.color10}
-            />
-          </View>
-        </View>
-        <View>
-          <Text style={[Style.headline, { marginTop: 0, marginBottom: 10 }]}>
-            {name}, {age}
-          </Text>
-
-          <View style={styles.sportContainer}>
-            <View style={styles.sport}>
-              <Text style={styles.text}>{sports[0]}</Text>
-              <View style={styles.stars}>
-                <AntDesign
-                  name="star"
-                  margin={1}
-                  size={15}
-                  color={Color.color1}
-                />
-                <AntDesign
-                  name="star"
-                  margin={1}
-                  size={15}
-                  color={Color.color1}
-                />
-                <AntDesign
-                  name="star"
-                  margin={1}
-                  size={15}
-                  color={Color.color1}
-                />
-              </View>
-            </View>
-            <View style={[styles.sport, { marginBottom: 30 }]}>
-              <Text style={styles.text}>{sports[1]}</Text>
-              <View style={styles.stars}>
-                <AntDesign
-                  name="star"
-                  margin={1}
-                  size={15}
-                  color={Color.color1}
-                />
-                <AntDesign
-                  name="star"
-                  margin={1}
-                  size={15}
-                  color={Color.color1}
-                />
-                <AntDesign
-                  name="star"
-                  margin={1}
-                  size={15}
-                  color={Color.color1}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -206,11 +104,121 @@ const NewFriends = () => {
             sports={item.sports}
             image={item.image}
             id={item.id}
-          ></Item>
+            yes={() => yes(item.id, item)}
+            no={() => no(item.id)}
+          />
         )}
         keyExtractor={(item) => item.id}
       />
     </SafeAreaView>
+  );
+};
+
+const Item = ({
+  id,
+  name,
+  age,
+  sports,
+  image,
+  location,
+  colorStars1,
+  colorStars2,
+  colorStars3,
+  colorStars4,
+  colorStars5,
+  colorStars6,
+  title,
+  yes,
+  no,
+}) => {
+  return (
+    <View style={styles.mainContainer}>
+      <Image
+        source={{ uri: image }}
+        style={{
+          width: 300,
+          height: 300,
+          borderRadius: 5,
+          margin: 30,
+          borderWidth: 0.8,
+          borderColor: Color.color1,
+        }}
+      />
+      <View style={styles.containerYesNo}>
+        <View id={id} onPress={no} style={styles.no}>
+          <AntDesign
+            id={id}
+            onPress={no}
+            name="close"
+            size={24}
+            color={Color.color9}
+          />
+        </View>
+        <View id={id} style={styles.yes} onPress={yes}>
+          <AntDesign
+            id={id}
+            onPress={yes}
+            name="check"
+            size={24}
+            color={Color.color10}
+          />
+        </View>
+      </View>
+      <View>
+        <Text style={[Style.headline, { marginTop: 0, marginBottom: 10 }]}>
+          {name}, {age}
+        </Text>
+
+        <View style={styles.sportContainer}>
+          <View style={styles.sport}>
+            <Text style={styles.text}>{sports[0]}</Text>
+            <View style={styles.stars}>
+              <AntDesign
+                name="star"
+                margin={1}
+                size={15}
+                color={Color.color1}
+              />
+              <AntDesign
+                name="star"
+                margin={1}
+                size={15}
+                color={Color.color1}
+              />
+              <AntDesign
+                name="star"
+                margin={1}
+                size={15}
+                color={Color.color1}
+              />
+            </View>
+          </View>
+          <View style={[styles.sport, { marginBottom: 30 }]}>
+            <Text style={styles.text}>{sports[1]}</Text>
+            <View style={styles.stars}>
+              <AntDesign
+                name="star"
+                margin={1}
+                size={15}
+                color={Color.color1}
+              />
+              <AntDesign
+                name="star"
+                margin={1}
+                size={15}
+                color={Color.color1}
+              />
+              <AntDesign
+                name="star"
+                margin={1}
+                size={15}
+                color={Color.color1}
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
   );
 };
 

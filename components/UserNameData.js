@@ -7,6 +7,8 @@ import {
   Platform,
   Keyboard,
   Text,
+  Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
@@ -16,7 +18,8 @@ import Color from "../style/Color";
 import { UseContextHook } from "../store/context/ContextProvider";
 import * as Location from "expo-location";
 
-const UserNameData = () => {
+
+const UserNameData = ({ cta }) => {
   let {
     setActionButtonOpacity,
     userData,
@@ -244,6 +247,7 @@ const UserNameData = () => {
               display={displayPassword}
             />
           </View>
+        
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
