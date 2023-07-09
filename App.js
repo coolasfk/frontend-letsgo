@@ -1,7 +1,8 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ContextProvider from "../fr/store/context/ContextProvider";
+import ContextProvider from "./store/context/ContextProvider";
+
 
 // import AppLoading from "expo-app-loading";
 // import SplashScreen from "expo-splash-screen";

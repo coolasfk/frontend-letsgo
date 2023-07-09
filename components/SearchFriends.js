@@ -15,7 +15,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import MyFriends from "./MyFriends";
 
-const NewFriends = () => {
+const SearchFriends = () => {
   let {
     user,
     setUser,
@@ -32,8 +32,6 @@ const NewFriends = () => {
   } = UseContextHook();
 
   const yes = (id, newUser) => {
-    // elToAdd =
-    //   e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id;
     let newArray = fetchedUsers.filter((el) => el.id !== id);
 
     setArrayWithMyFriendsId([...arrayWithMyFriendsId, id]);
@@ -64,30 +62,19 @@ const NewFriends = () => {
   };
 
   const no = (id) => {
-    // console.log(
-    //   "e target",
-    //   e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id
-    // );
-    // elToRemoveId =
-    //   e.target._internalFiberInstanceHandleDEV._debugOwner.pendingProps.id;
     let newArray = fetchedUsers.filter((el) => el.id !== id);
     setpeopleIdontWannaSeeAgain([...peopleIdontWannaSeeAgain, id]);
-    console.log("peopleIdontWannaSeeAgain", peopleIdontWannaSeeAgain);
+
     setFetchedUsers(newArray);
+    peopleIdontWannaSeeAgainOnServer(id);
   };
 
-  useEffect(() => {
-    peopleIdontWannaSeeAgainOnServer();
-  }, [peopleIdontWannaSeeAgain]);
-
-  const peopleIdontWannaSeeAgainOnServer = async () => {
+  const peopleIdontWannaSeeAgainOnServer = async (id) => {
     try {
       const result = await axios.patch(
         `https://lestgo--coolasfk.repl.co/users/peopleIdontWannaSeeAgain`,
-        { peopleIdontWannaSeeAgain: peopleIdontWannaSeeAgain }
+        { peopleIdontWannaSeeAgain: id }
       );
-
-      console.log("526626262626262662result", result.data);
     } catch (error) {
       console.log("error putting data", error);
     }
@@ -105,7 +92,7 @@ const NewFriends = () => {
             image={item.image}
             id={item.id}
             yes={() => yes(item.id, item)}
-            no={() => no(item.id)}
+            no={() => no(item.id, item)}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -298,4 +285,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewFriends;
+export default SearchFriends;

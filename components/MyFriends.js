@@ -15,19 +15,12 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 const MyFriends = () => {
-  let {
-    myFriendsFetched,
-  } = UseContextHook();
-  console.log({myFriendsFetched})
+  let { myFriendsFetched } = UseContextHook();
+  console.log({ myFriendsFetched });
 
   const messageFriend = () => {
     console.log("i am messaging my friends here");
   };
-
- 
-  
-
-  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,7 +55,7 @@ const Item = ({
   colorStars5,
   colorStars6,
   title,
-  messageFriend
+  messageFriend,
 }) => {
   return (
     <View style={styles.mainContainer}>
@@ -78,10 +71,8 @@ const Item = ({
         }}
       />
 
-      {/* <View></View> */}
       <View>
         <View style={styles.containerYesNo}>
-         
           <View id={id} style={styles.yes} onPress={messageFriend}>
             <AntDesign
               id={id}
@@ -200,7 +191,7 @@ const styles = StyleSheet.create({
     justifyItems: "center",
     // borderWidth: 3,
   },
- 
+
   containerYesNo: {
     flexDirection: "row",
     alignItems: "center",

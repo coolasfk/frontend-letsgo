@@ -5,8 +5,11 @@ import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import Color from "../style/Color";
 import { UseContextHook } from "../store/context/ContextProvider";
 import * as ImageManipulator from "expo-image-manipulator";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const windowWidth = Dimensions.get("window").width;
+import RNFetchBlob from "rn-fetch-blob";
+
+const fs = RNFetchBlob.fs;
 
 const ImageUpload = () => {
   let {
@@ -22,7 +25,7 @@ const ImageUpload = () => {
 
   let [imageHeight, setImageHeight] = useState(null);
   let [imageWidth, setImageWidth] = useState(null);
-
+  let [stateP, setStateP] = useState(null);
   console.log("image");
 
   const pickImage = async () => {
@@ -81,56 +84,6 @@ const ImageUpload = () => {
     }
   };
 
-  // const removeImage = async () => {
-  //   console.log("i want to change my console log");
-  //   // No permissions request is necessary for launching the image library
-  //   try {
-  //     let result = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //       allowsEditing: true,
-  //       aspect: [4, 3],
-
-  //       maxWidth: 300,
-  //       maxHeight: 350,
-  //       // quality: 0.5,
-  //       base64: true,
-  //     });
-
-  //     if (!result.canceled) {
-  //       console.log("result image", result, result.assets[0].uri);
-  //       setImage(result.assets[0].uri);
-
-  //       setActionButtonOpacity(1);
-
-  //       let height = result.assets[0].height / 10;
-  //       let width = result.assets[0].width / 10;
-  //       if (height > 3000) {
-  //         setImageHeight(Math.round(result.assets[0].height / 8));
-  //         setImageWidth(Math.round(result.assets[0].width / 8));
-  //       } else if (height > 1000 && height < 3000) {
-  //         setImageHeight(Math.round(result.assets[0].height / 3));
-  //         setImageWidth(Math.round(result.assets[0].width / 3));
-  //       }
-
-  //       console.log(
-  //         "height & width",
-  //         result.assets[0].height,
-  //         result.assets[0].width
-  //       );
-  //       console.log(
-  //         "imageHeight, imageWidth inside not canceled",
-  //         imageHeight,
-  //         imageWidth
-  //       );
-
-  //       compressImage(result.assets[0].uri, height, width);
-  //     }
-  //   } catch (e) {
-  //     console.log("error removeImage", e);
-  //   }
-
-  // };
-
   const compressImage = async (imageUri, imageHeight, imageWidth) => {
     console.log("imageHeight & Width", imageHeight, imageWidth);
     console.log("i am trying to downscale image");
@@ -162,6 +115,28 @@ const ImageUpload = () => {
         console.log("now what?", e);
       }
     }
+  };
+
+  useEffect(() => ChangeUrlImageToBase64(), [base64]);
+
+  const ChangeUrlImageToBase64 = async () => {
+    let imagePath = base64;
+    console.log("imagePath", imagePath);
+    // set the image/video path here
+    RNFetchBlob.config({
+      fileCache: true,
+    })
+      .fetch("GET", imagePath) // the file is now downloaded at local storage
+      .then((resp) => {
+        imagePath = resp.path(); // to get the file path
+        return resp.readFile("base64"); // to get the base64 string
+      })
+      .then((base64) => {
+        // here base64 encoded file data is returned
+        this.setStateP({ base64Data: base64 });
+        console.log("stateP", stateP);
+        return fs.unlink(imagePath); // to remove the file from local storage
+      });
   };
 
   return (

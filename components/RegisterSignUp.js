@@ -101,7 +101,8 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
           console.error("error:", error);
         })
         .then((d) => d.json())
-        .finally(() => {
+        .then((res) => {
+          console.log(res)
           navigation.navigate("FindBuddy");
         });
 

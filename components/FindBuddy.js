@@ -6,7 +6,7 @@ import { UseContextHook } from "../store/context/ContextProvider";
 import axios from "axios";
 import Style from "../style/Style";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
-import NewFriends from "./NewFriends";
+import NewFriends from "./SearchFriends";
 import MyFriends from "./MyFriends";
 
 const backendUrl = "https://lestgo--coolasfk.repl.co/users";
@@ -65,6 +65,7 @@ const FindBuddy = ({ navigation }) => {
     // password = "a";
 
     let result;
+    console.log("email", "password", email, password);
     try {
       result = await axios.post(
         "https://lestgo--coolasfk.repl.co/users/:email1/",
@@ -104,8 +105,10 @@ const FindBuddy = ({ navigation }) => {
 
   console.log("peopleIdontWannaSeeAgain", peopleIdontWannaSeeAgain);
 
-  ////-----------> FETCHING ALL THE USERS FROM THE SERVER :TODO: make sure you are not fetching yourself
+  ////-----------> FETCHING ALL THE USERS FROM THE SERVER
+
   //https://lestgo.coolasfk.repl.co/users_nearby?lon=18.070568214261815&lat=53.18286155194309&distance=300000
+
   let fetchUsers = async () => {
     console.log("fetch fetch", peopleIdontWannaSeeAgain);
 
@@ -118,7 +121,7 @@ const FindBuddy = ({ navigation }) => {
         // { location: userLocation, distance: 10000 }
       );
       let returnedUsers = [];
-      console.log("567567567", response.data);
+
       for (let user of response.data) {
         let tempUser = {
           id: user._id,
@@ -130,7 +133,7 @@ const FindBuddy = ({ navigation }) => {
           friends: user.friends,
           peopleIdontWannaSeeAgain: user.peopleIdontWannaSeeAgain,
         };
-
+       
         returnedUsers.push(tempUser);
       }
       setFetchedUsers(returnedUsers);
@@ -144,37 +147,63 @@ const FindBuddy = ({ navigation }) => {
     fetchUsers();
   };
 
-  let fetchMyFriends = async () => {
-    console.log("fetch old started");
+  let fetchMyFriends = () => {
+   
     setIsNewFriendsOn(false);
-    console.log("test");
-    try {
-      const respose = await axios.post(
-        "https://lestgo--coolasfk.repl.co/myfriends"
-      );
-      let returnedUsers = [];
-      console.log(".........response data", respose.data);
-      for (let user of respose.data) {
-        const tempUser = {
-          id: user._id,
-          name: user.name,
-          location: user.location,
-          age: user.age,
-          sports: user.sports,
-          image: user.image,
-        };
-        returnedUsers.push(tempUser);
-      }
+    // console.log("test");
+    // try {
+    //   const respose = await axios.post(
+    //     "https://lestgo--coolasfk.repl.co/myfriends"
+    //   );
+    //   let returnedUsers = [];
+    //   console.log(".........response data", respose.data);
+    //   for (let user of respose.data) {
+    //     const tempUser = {
+    //       id: user._id,
+    //       name: user.name,
+    //       location: user.location,
+    //       age: user.age,
+    //       sports: user.sports,
+    //       image: user.image,
+    //     };
+    //     returnedUsers.push(tempUser);
+    //   }
 
-      setMyFriendsFetched(returnedUsers);
-    } catch (e) {
-      console.log("error fetching", e);
-    }
+    //   setMyFriendsFetched(returnedUsers);
+    // } catch (e) {
+    //   console.log("error fetching", e);
+    // }
   };
 
   const goToEditYourProfile = () => {
     navigation.navigate("EditYourProfile");
   };
+
+  useEffect(() => {
+   
+    axios
+      .post("https://lestgo--coolasfk.repl.co/myfriends")
+      .then((response) => {
+        let returnedUsers = [];
+       
+        for (let user of response.data) {
+          const tempUser = {
+            id: user._id,
+            name: user.name,
+            location: user.location,
+            age: user.age,
+            sports: user.sports,
+            image: user.image,
+          };
+          returnedUsers.push(tempUser);
+        }
+
+        setMyFriendsFetched(returnedUsers);
+      });
+    // } catch (e) {
+    //   console.log("error fetching", e);
+    // }
+  }, []);
 
   return (
     <View style={styles.mainContainer}>
@@ -204,7 +233,7 @@ const FindBuddy = ({ navigation }) => {
         Hey, {userName}! Let's go!
       </Text>
 
-      <View onPress={fetchNewFriends} style={styles.newFriendsContainer}>
+      <View style={styles.newFriendsContainer}>
         <View style={[styles.friendsBtn, { borderColor: Color.color10 }]}>
           <Text
             onPress={fetchNewFriends}
@@ -213,10 +242,7 @@ const FindBuddy = ({ navigation }) => {
             Search Friends
           </Text>
         </View>
-        <View
-          onPress={fetchMyFriends}
-          style={[styles.friendsBtn, { borderColor: Color.fontBodyColor }]}
-        >
+        <View style={[styles.friendsBtn, { borderColor: Color.fontBodyColor }]}>
           <Text
             onPress={fetchMyFriends}
             style={[
