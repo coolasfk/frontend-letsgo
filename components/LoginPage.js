@@ -129,6 +129,9 @@ const LoginPage = ({ navigation, cta }) => {
             display={displayEmail}
           />
         </View>
+        </View>
+        <View>
+
         <View style={design.inputContainer}>
           <TextInput
             autoCorrect={false}

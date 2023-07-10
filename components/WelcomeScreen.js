@@ -16,6 +16,7 @@ const WelcomeScreen = ({ cta, onPress, navigation }) => {
       </Text>
       <View style={style.containerForLogo}>
         <Image style={style.image} source={require("../assets/MainLogo.png")} />
+       
       </View>
       <ActionButton cta={"join us"} onPress={goToStartScreen} />
       <ActionButton

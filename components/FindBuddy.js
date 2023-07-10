@@ -8,6 +8,7 @@ import Style from "../style/Style";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import NewFriends from "./SearchFriends";
 import MyFriends from "./MyFriends";
+import SearchFriends from "./SearchFriends";
 
 const backendUrl = "https://lestgo--coolasfk.repl.co/users";
 const FindBuddy = ({ navigation }) => {
@@ -133,7 +134,7 @@ const FindBuddy = ({ navigation }) => {
           friends: user.friends,
           peopleIdontWannaSeeAgain: user.peopleIdontWannaSeeAgain,
         };
-       
+
         returnedUsers.push(tempUser);
       }
       setFetchedUsers(returnedUsers);
@@ -142,37 +143,13 @@ const FindBuddy = ({ navigation }) => {
     }
   };
 
-  const fetchNewFriends = () => {
+  const searchFriends = () => {
     setIsNewFriendsOn(true);
     fetchUsers();
   };
 
   let fetchMyFriends = () => {
-   
     setIsNewFriendsOn(false);
-    // console.log("test");
-    // try {
-    //   const respose = await axios.post(
-    //     "https://lestgo--coolasfk.repl.co/myfriends"
-    //   );
-    //   let returnedUsers = [];
-    //   console.log(".........response data", respose.data);
-    //   for (let user of respose.data) {
-    //     const tempUser = {
-    //       id: user._id,
-    //       name: user.name,
-    //       location: user.location,
-    //       age: user.age,
-    //       sports: user.sports,
-    //       image: user.image,
-    //     };
-    //     returnedUsers.push(tempUser);
-    //   }
-
-    //   setMyFriendsFetched(returnedUsers);
-    // } catch (e) {
-    //   console.log("error fetching", e);
-    // }
   };
 
   const goToEditYourProfile = () => {
@@ -180,12 +157,11 @@ const FindBuddy = ({ navigation }) => {
   };
 
   useEffect(() => {
-   
     axios
       .post("https://lestgo--coolasfk.repl.co/myfriends")
       .then((response) => {
         let returnedUsers = [];
-       
+
         for (let user of response.data) {
           const tempUser = {
             id: user._id,
@@ -200,9 +176,6 @@ const FindBuddy = ({ navigation }) => {
 
         setMyFriendsFetched(returnedUsers);
       });
-    // } catch (e) {
-    //   console.log("error fetching", e);
-    // }
   }, []);
 
   return (
@@ -218,15 +191,12 @@ const FindBuddy = ({ navigation }) => {
       </Text>
 
       <Image
-        source={{ uri: userImage }}
+        source={{ uri: `data:image/png;base64,${userImage}` }}
         onPress={goToEditYourProfile}
         style={{
           width: 80,
           height: 80,
           borderRadius: 50,
-          // marginTop: 80,
-          // borderWidth: 0.8,
-          // borderColor: Color.color1,
         }}
       />
       <Text style={[Style.headline, { marginTop: 20, fontSize: 18 }]}>
@@ -234,20 +204,47 @@ const FindBuddy = ({ navigation }) => {
       </Text>
 
       <View style={styles.newFriendsContainer}>
-        <View style={[styles.friendsBtn, { borderColor: Color.color10 }]}>
+        <View
+          style={[
+            styles.friendsBtn,
+            isNewFriendsOn
+              ? { borderColor: Color.color10, backgroundColor: Color.color10 }
+              : { borderColor: Color.color10 },
+          ]}
+        >
           <Text
-            onPress={fetchNewFriends}
-            style={[Style.smallText, { marginBottom: 0, color: Color.color10 }]}
+            onPress={searchFriends}
+            style={[
+              Style.smallText,
+              isNewFriendsOn
+                ? { marginBottom: 0, color: Color.myBgColor }
+                : { marginBottom: 0, color: Color.color10 },
+            ]}
           >
             Search Friends
           </Text>
         </View>
-        <View style={[styles.friendsBtn, { borderColor: Color.fontBodyColor }]}>
+
+        <View
+          style={[
+            styles.friendsBtn,
+            isNewFriendsOn
+              ? {
+                  borderColor: Color.fontBodyColor,
+                }
+              : {
+                  borderColor: Color.fontBodyColor,
+                  backgroundColor: Color.fontBodyColor,
+                },
+          ]}
+        >
           <Text
             onPress={fetchMyFriends}
             style={[
               Style.smallText,
-              { marginBottom: 0, fontSize: 18, color: Color.fontBodyColor },
+              isNewFriendsOn
+                ? { marginBottom: 0, fontSize: 18, color: Color.fontBodyColor }
+                : { marginBottom: 0, fontSize: 18, color: Color.myBgColor },
             ]}
           >
             Your Friends
@@ -256,7 +253,7 @@ const FindBuddy = ({ navigation }) => {
         <View></View>
       </View>
       {isNewFriendsOn ? (
-        <NewFriends fetchedUsers={fetchedUsers} />
+        <SearchFriends fetchedUsers={fetchedUsers} />
       ) : (
         <MyFriends myFriendsFetched={myFriendsFetched} />
       )}

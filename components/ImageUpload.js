@@ -6,10 +6,8 @@ import Color from "../style/Color";
 import { UseContextHook } from "../store/context/ContextProvider";
 import * as ImageManipulator from "expo-image-manipulator";
 import { useState, useEffect } from "react";
+// import * as FileSystem from "expo-file-system";
 const windowWidth = Dimensions.get("window").width;
-import RNFetchBlob from "rn-fetch-blob";
-
-const fs = RNFetchBlob.fs;
 
 const ImageUpload = () => {
   let {
@@ -21,16 +19,13 @@ const ImageUpload = () => {
     setUserData,
     base64,
     setBase64,
+    
   } = UseContextHook();
 
   let [imageHeight, setImageHeight] = useState(null);
   let [imageWidth, setImageWidth] = useState(null);
-  let [stateP, setStateP] = useState(null);
-  console.log("image");
 
   const pickImage = async () => {
-    console.log("pickImage is starting");
-
     try {
       // No permissions request is necessary for launching the image library
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -109,61 +104,38 @@ const ImageUpload = () => {
           }
         );
 
-        console.log(manipResult.uri);
-        setBase64(manipResult.uri);
+        console.log("manipresult", manipResult.uri, manipResult.base64);
+        setBase64(manipResult.base64);
       } catch (e) {
         console.log("now what?", e);
       }
     }
   };
 
-  useEffect(() => ChangeUrlImageToBase64(), [base64]);
-
-  const ChangeUrlImageToBase64 = async () => {
-    let imagePath = base64;
-    console.log("imagePath", imagePath);
-    // set the image/video path here
-    RNFetchBlob.config({
-      fileCache: true,
-    })
-      .fetch("GET", imagePath) // the file is now downloaded at local storage
-      .then((resp) => {
-        imagePath = resp.path(); // to get the file path
-        return resp.readFile("base64"); // to get the base64 string
-      })
-      .then((base64) => {
-        // here base64 encoded file data is returned
-        this.setStateP({ base64Data: base64 });
-        console.log("stateP", stateP);
-        return fs.unlink(imagePath); // to remove the file from local storage
-      });
-  };
-
   return (
     <View width={windowWidth}>
       {image ? (
-        image && (
-          <View style={design.centered}>
-            <MaterialIcons
-              name="highlight-remove"
-              size={30}
-              style={design.removeIcon}
-              onPress={pickImage}
-            />
-            <Image
-              source={{ uri: base64 }}
-              style={{
-                width: 300,
-                height: 350,
-                borderRadius: 5,
-                margin: 35,
-                borderWidth: 0.8,
-                borderColor: Color.color1,
-              }}
-            />
-            <Text style={design.smallText}>Happy?</Text>
-          </View>
-        )
+        // image &&
+        <View style={design.centered}>
+          <MaterialIcons
+            name="highlight-remove"
+            size={30}
+            style={design.removeIcon}
+            onPress={pickImage}
+          />
+          <Image
+            source={{ uri: `data:image/png;base64,${base64}` }}
+            style={{
+              width: 300,
+              height: 350,
+              borderRadius: 5,
+              margin: 35,
+              borderWidth: 0.8,
+              borderColor: Color.color1,
+            }}
+          />
+          <Text style={design.smallText}>Happy?</Text>
+        </View>
       ) : (
         <View style={design.centered}>
           <View style={design.square}>
@@ -221,9 +193,7 @@ const design = StyleSheet.create({
   },
   container: {
     width: "100%",
-    // justifyContent: "center",
-    // textAlign: "center",
-    // textJustify: "center",
+
     alignItems: "center",
     justifyItems: "center",
     // borderWidth: 7,

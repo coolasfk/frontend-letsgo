@@ -60,7 +60,8 @@ const Item = ({
   return (
     <View style={styles.mainContainer}>
       <Image
-        source={{ uri: image }}
+        // source={{ uri: image }}
+        source={{ uri: `data:image/png;base64,${image}` }}
         style={{
           width: 300,
           height: 300,

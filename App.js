@@ -3,7 +3,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ContextProvider from "./store/context/ContextProvider";
 
-
 // import AppLoading from "expo-app-loading";
 // import SplashScreen from "expo-splash-screen";
 import {
@@ -21,6 +20,8 @@ import FindBuddy from "./components/FindBuddy";
 import OldFriends from "./components/MyFriends";
 import EditYourProfile from "./components/EditYourProfile";
 import LoginPage from "./components/LoginPage";
+import EditName from "./components/editYourProfileComponents/EditName";
+import EditAge from "./components/editYourProfileComponents/EditAge";
 
 const App = () => {
   let [fontsLoaded] = useFonts({
@@ -71,6 +72,16 @@ const App = () => {
           <Stack.Screen
             name="LoginPage"
             component={LoginPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditName"
+            component={EditName}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditAge"
+            component={EditAge}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

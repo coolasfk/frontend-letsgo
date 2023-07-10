@@ -18,13 +18,10 @@ import { useState } from "react";
 import { UseContextHook } from "../store/context/ContextProvider";
 const windowWidth = Dimensions.get("window").width;
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// import axios from "../node_modules/axios";
 
-// var cors = require("cors");
 
 const RegisterSignUp = ({ cta, onPress, navigation }) => {
-  // const windowWidth = Dimensions.get("window").width;
+ 
   const { height, width, scale, fontScale } = useWindowDimensions();
 
   console.log("is mu console working2");
@@ -36,11 +33,8 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
     base64,
     setBase64,
     chosenSports,
-
     setImage,
-
     setUserData,
-
     setChosenSports,
     location,
     setLocation,
@@ -91,7 +85,7 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
       userData.sports = chosenSports;
       userData.location = userLocation;
       userData.city = newCity;
-      console.log("userData.city", userData.city);
+      console.log("userData.base64", userData.image, typeof base64);
       fetch("https://lestgo--coolasfk.repl.co/users", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -102,11 +96,11 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
         })
         .then((d) => d.json())
         .then((res) => {
-          console.log(res)
+          console.log(res);
           navigation.navigate("FindBuddy");
         });
 
-      saveEmailAndPass();
+      // saveEmailAndPass();
     }
   };
 
@@ -131,16 +125,16 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
     }
   };
 
-  const saveEmailAndPass = async () => {
-    try {
-      // const email = JSON.stringify(userData.email1)
-      await AsyncStorage.setItem("email", userData.email1);
-      // const password = JSON.stringify(userData.password)
-      await AsyncStorage.setItem("password", userData.password);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const saveEmailAndPass = async () => {
+  //   try {
+  //     // const email = JSON.stringify(userData.email1)
+  //     await AsyncStorage.setItem("email", userData.email1);
+  //     // const password = JSON.stringify(userData.password)
+  //     await AsyncStorage.setItem("password", userData.password);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   // const storeData = async (value) => {
   //   try {

@@ -247,7 +247,6 @@ const UserNameData = ({ cta }) => {
               display={displayPassword}
             />
           </View>
-        
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -320,5 +319,10 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
+
+
+
+
+
 
 export default UserNameData;
