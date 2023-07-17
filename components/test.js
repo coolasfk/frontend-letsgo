@@ -6,7 +6,7 @@ const MyComponent = () => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
   
       if (status !== 'granted') {
-        console.log('Permission to access camera roll denied');
+        ('Permission to access camera roll denied');
         return;
       }
   
@@ -43,9 +43,9 @@ const MyComponent = () => {
       });
   
       if (response.ok) {
-        console.log('PNG file uploaded successfully');
+        ('PNG file uploaded successfully');
       } else {
-        console.log('Error uploading PNG file');
+        ('Error uploading PNG file');
       }
     };
 
@@ -81,9 +81,9 @@ const MyComponent = () => {
           });
       
           if (response.ok) {
-            console.log('PNG file uploaded successfully');
+            ('PNG file uploaded successfully');
           } else {
-            console.log('Error uploading PNG file');
+            ('Error uploading PNG file');
           }
         };
       

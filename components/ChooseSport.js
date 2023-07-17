@@ -93,7 +93,7 @@ const ChooseSport = () => {
     }
   };
 
-  // console.log("chosenSports:", chosenSports);
+  // ("chosenSports:", chosenSports);
   useEffect(() => {
     if (chosenSports.length === 2) {
       setActionButtonOpacity(1);

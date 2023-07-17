@@ -18,13 +18,11 @@ import { useState } from "react";
 import { UseContextHook } from "../store/context/ContextProvider";
 const windowWidth = Dimensions.get("window").width;
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
-
+import axios from "axios";
 const RegisterSignUp = ({ cta, onPress, navigation }) => {
- 
   const { height, width, scale, fontScale } = useWindowDimensions();
 
-  console.log("is mu console working2");
+  ("is mu console working2");
   let {
     image,
     actionBtnOpacity,
@@ -59,7 +57,7 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
       steps === 0
       // && image !== null
     ) {
-      console.log("is mu console working???");
+      ("is mu console working???");
       setSteps(width * 2);
       setActionButtonOpacity(0.3);
       setProgressText("2/4");
@@ -67,10 +65,10 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
         "Pick two activities to find companions who share your preferences."
       );
     } else if (steps === width * 2) {
-      console.log("is mu console working4");
+      ("is mu console working4");
       setSteps(width * 4);
       setActionButtonOpacity(0.3);
-      // console.log("data should be sent", "userData", userData);
+      // ("data should be sent", "userData", userData);
       setProgressText("3/4");
       setHeadline("Now the formalities. What's your name?");
       //  submitData()
@@ -80,27 +78,56 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
       setHeadline("Just check those boxes and we're back in action!");
       setActionText("submit");
     } else if (steps === width * 6) {
-      console.log("userData", userData);
       userData.image = base64;
       userData.sports = chosenSports;
       userData.location = userLocation;
       userData.city = newCity;
-      console.log("userData.base64", userData.image, typeof base64);
-      fetch("https://lestgo--coolasfk.repl.co/users", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(userData),
-      })
-        .catch((error) => {
-          console.error("error:", error);
-        })
-        .then((d) => d.json())
-        .then((res) => {
-          console.log(res);
-          navigation.navigate("FindBuddy");
-        });
+      // console.log("user data", userData);
+      sendDataToServer();
+
+      // fetch("https://lestgo--coolasfk.repl.co/users", {
+      //   method: "POST",
+      //   headers: { "content-type": "application/json" },
+      //   body: JSON.stringify(userData),
+      // })
+      //   .catch((error) => {
+      //     console.error("error:", error);
+      //   })
+      //   .then((d) => d.json())
+      //   .then((res) => {
+      //     navigation.navigate("AfterLoginPage");
+      //   });
 
       // saveEmailAndPass();
+    }
+  };
+
+  const sendDataToServer = async () => {
+    console.log(userData);
+
+    // userData.image = base64;
+    // userData.sports = chosenSports;
+    // userData.location = userLocation;
+    // userData.city = newCity;
+
+    try {
+      let data = await axios.post("https://lestgo--coolasfk.repl.co/users", {
+        image: base64,
+        sports: chosenSports,
+        location: userLocation,
+        city: newCity,
+        name: userData.name,
+        age: userData.age,
+        email1: userData.email1,
+        password: userData.password,
+      });
+
+      if (data) {
+        navigation.navigate("AfterLoginPage");
+        console.log("user added");
+      }
+    } catch (e) {
+      console.log("error updating userData", e);
     }
   };
 
@@ -132,7 +159,7 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
   //     // const password = JSON.stringify(userData.password)
   //     await AsyncStorage.setItem("password", userData.password);
   //   } catch (e) {
-  //     console.log(e);
+  //     (e);
   //   }
   // };
 

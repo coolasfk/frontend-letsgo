@@ -13,13 +13,13 @@ import { UseContextHook } from "../store/context/ContextProvider";
 import Style from "../style/Style";
 import React from "react";
 import { useEffect, useState } from "react";
+import { Entypo } from "@expo/vector-icons";
 
 const MyFriends = () => {
-  let { myFriendsFetched } = UseContextHook();
-  console.log({ myFriendsFetched });
+  let { myFriendsFetched, bio, setBio } = UseContextHook();
 
   const messageFriend = () => {
-    console.log("i am messaging my friends here");
+    ("i am messaging my friends here");
   };
 
   return (
@@ -33,6 +33,8 @@ const MyFriends = () => {
             sports={item.sports}
             image={item.image}
             messageFriend={messageFriend}
+            bio={item.bio}
+            city={item.city}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -47,6 +49,7 @@ const Item = ({
   age,
   sports,
   image,
+  bio,
   location,
   colorStars1,
   colorStars2,
@@ -56,9 +59,10 @@ const Item = ({
   colorStars6,
   title,
   messageFriend,
+  city,
 }) => {
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer]}>
       <Image
         // source={{ uri: image }}
         source={{ uri: `data:image/png;base64,${image}` }}
@@ -91,7 +95,7 @@ const Item = ({
         <View style={styles.sportContainer}>
           <View style={styles.sport}>
             <Text style={styles.text}>{sports[0]}</Text>
-            <View style={styles.stars}>
+            {/* <View style={styles.stars}>
               <AntDesign
                 name="star"
                 margin={1}
@@ -110,11 +114,11 @@ const Item = ({
                 size={15}
                 color={Color.color1}
               />
-            </View>
+            </View> */}
           </View>
           <View style={[styles.sport, { marginBottom: 30 }]}>
             <Text style={styles.text}>{sports[1]}</Text>
-            <View style={styles.stars}>
+            {/* <View style={styles.stars}>
               <AntDesign
                 name="star"
                 margin={1}
@@ -133,7 +137,26 @@ const Item = ({
                 size={15}
                 color={Color.color1}
               />
-            </View>
+            </View> */}
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+
+              alignItems: "center",
+              flexDirection: "row",
+              marginBottom: 15,
+              marginTop: -10,
+            }}
+          >
+            <Entypo
+              name="location-pin"
+              size={24}
+              color={Color.color2}
+              marginRight={3}
+              marginBottom={7}
+            />
+            <Text style={styles.smallText}>{city}</Text>
           </View>
         </View>
       </View>

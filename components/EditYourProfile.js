@@ -24,9 +24,7 @@ const windowWidth = Dimensions.get("window").width;
 import * as Location from "expo-location";
 import { Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
-import * as ImageManipulator from "expo-image-manipulator";
-import { SaveFormat } from "expo-image-manipulator";
+import { Entypo } from "@expo/vector-icons";
 import axios from "axios";
 import EditName from "./editYourProfileComponents/EditName";
 import { AntDesign } from "@expo/vector-icons";
@@ -41,7 +39,6 @@ const EditYourProfile = ({ navigation }) => {
     userLocation,
     setLocation,
     setUserLocation,
-    setCity,
 
     userName,
     setUserName,
@@ -57,159 +54,29 @@ const EditYourProfile = ({ navigation }) => {
     base64,
     userImage,
     setUserImage,
+    setEmail,
+    setPassword,
+    bio,
+    setBio,
   } = UseContextHook();
-  const [textInputName, setTextInputName] = useState("");
-  const [textInputAge, setTextInputAge] = useState(null);
-  const [tempUserImage, setTempUserImage] = useState(userImage);
-  let isPressed;
 
-  let updateLocation = async () => {
-    console.log("fetching location started");
-    let { status } = await Location.requestForegroundPermissionsAsync();
-
-    if (status !== "granted") {
-      console.log("function works");
-      setErrorMsg("Permission to access location was denied");
-      return;
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
-
-    console.log(
-      "lon, lat",
-      location.coords.longitude,
-      location.coords.latitude
-    );
-    let longitude = location.coords.longitude;
-    let latitude = location.coords.latitude;
-    let coordinates = [longitude, latitude];
-
-    let address = await Location.reverseGeocodeAsync(location.coords);
-
-    let newCity = address[0].city;
-    setCity(newCity);
-    console.log("newCity", newCity);
-    setUserData({ ...userData, city: newCity });
-    setUserLocation({
-      type: "Point",
-      coordinates: coordinates,
-    });
-  };
-
-  const handleUpdatedLocation = (newText) => {
-    setLocation(newText);
-  };
-
-  const pickImage = async () => {
+  let deleteUser = async () => {
     try {
-      // No permissions request is necessary for launching the image library
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-
-        maxWidth: 300,
-        maxHeight: 350,
-
-        base64: true,
-      });
-
-      if (!result.canceled) {
-        // setImage(result.assets[0].uri);
-        console.log("i want to change my console log");
-
-        // setImageHeight(Math.round(result.assets[0].height / 10));
-        // setImageWidth(Math.round(result.assets[0].width / 10));
-        console.log(
-          "height & width",
-          result.assets[0].height,
-          result.assets[0].width
-        );
-
-        let height = result.assets[0].height;
-        let width = result.assets[0].width;
-
-        if (height > 3000) {
-          height = Math.round(result.assets[0].height / 6);
-          width = Math.round(result.assets[0].width / 6);
-        } else if (height > 1500 && height < 3000) {
-          height = Math.round(result.assets[0].height / 3);
-          width = Math.round(result.assets[0].width / 3);
-        } else if (height > 5000) {
-          height = Math.round(result.assets[0].height / 8);
-          width = Math.round(result.assets[0].width / 8);
-        } else if (height < 900) {
-          height = result.assets[0].height;
-          width = result.assets[0].width;
-        } else if (height >= 900 && height <= 1500) {
-          height = Math.round(result.assets[0].height / 2);
-          width = Math.round(result.assets[0].width / 2);
-        }
-
-        setActionButtonOpacity(1);
-        compressImage(result.assets[0].uri, height, width);
-      }
-    } catch (e) {
-      console.log("error image-upload", e);
-    }
-  };
-
-  const compressImage = async (imageUri, imageHeight, imageWidth) => {
-    console.log("imageHeight & Width", imageHeight, imageWidth);
-    console.log("i am trying to downscale image");
-    if (imageUri !== null) {
-      try {
-        console.log("lognr4");
-
-        const manipResult = await ImageManipulator.manipulateAsync(
-          imageUri,
-          [
-            {
-              resize: {
-                height: imageHeight,
-                width: imageWidth,
-              },
-            },
-          ],
-          {
-            compress: 1,
-            format: SaveFormat.PNG,
-
-            base64: true,
-          }
-        );
-
-        console.log("manipresult", manipResult.uri, manipResult.base64);
-        setBase64(manipResult.base64);
-        setTempUserImage(manipResult.base64);
-      } catch (e) {
-        console.log("now what?", e);
-      }
-    }
-  };
-
-  const updateImage = async () => {
-    console.log("base64", base64, "base64");
-    try {
-      const postUpdateImage = await axios.put(
-        "https://lestgo--coolasfk.repl.co/users/updateImage/",
-        { image: base64 }
+      const deleteUser = await axios.delete(
+        `https://lestgo--coolasfk.repl.co/users`
       );
-      if (postUpdateImage) {
-        console.log(postUpdateImage.data.image, "postUpdateImage");
-
-        setUserImage(postUpdateImage.data.image);
+      if (deleteUser) {
+        navigation.navigate("WelcomeScreen");
       }
     } catch (e) {
-      console.log("error updateImage", e);
+      "error deleting user", e;
     }
   };
 
   ///// navigation
 
   const goBack = () => {
-    navigation.navigate("FindBuddy");
+    navigation.navigate("AfterLoginPage");
   };
 
   const goToName = () => {
@@ -220,6 +87,27 @@ const EditYourProfile = ({ navigation }) => {
     navigation.navigate("EditAge");
   };
 
+  const goToLocation = () => {
+    navigation.navigate("EditLocation");
+  };
+
+  const goToSports = () => {
+    navigation.navigate("EditSports");
+  };
+
+  const goToImage = () => {
+    navigation.navigate("EditImage");
+  };
+
+  const goToBio = () => {
+    navigation.navigate("EditBio");
+  };
+
+  const logOut = () => {
+    setEmail("");
+    setPassword("");
+    navigation.navigate("WelcomeScreen");
+  };
   return (
     <ScrollView>
       <KeyboardAvoidingView
@@ -238,16 +126,24 @@ const EditYourProfile = ({ navigation }) => {
               <BackArrow onPress={goBack} />
             </View>
             <Text style={[Style.headline, { marginTop: 20 }]}>
-              Edit your profile here.
+              Edit your profile here
             </Text>
-            <View style={{ height: 500, weight: 400 }}>
+            <View style={{ height: 610, weight: 400, marginTop: 0 }}>
               <Item
                 name={userName}
                 age={userAge}
                 sports={userSports}
                 image={userImage}
                 goToName={goToName}
+                goToSports={goToSports}
+                goToImage={goToImage}
+                goToAge={goToAge}
+                userCity={userCity}
+                goToBio={goToBio}
               />
+            </View>
+            <View>
+              <View style={[styles.thinRectangle, { marginTop: 40 }]}></View>
             </View>
             <View style={design.centered}>
               <View
@@ -262,11 +158,9 @@ const EditYourProfile = ({ navigation }) => {
                   cta="update your name"
                 ></ActionButton>
               </View>
-
               <View
                 style={{
-                  // marginTop: 20,
-                  // marginBottom: 30,
+                  marginTop: -40,
                   padding: 20,
                   alignItems: "center",
                   justifyContent: "center",
@@ -278,102 +172,82 @@ const EditYourProfile = ({ navigation }) => {
                 ></ActionButton>
               </View>
 
-              <View style={design.inputContainer}>
-                <TextInput
-                  autoCorrect={false}
-                  maxLength={25}
-                  onChangeText={handleUpdatedLocation}
-                  style={design.textInput}
-                  placeholder="type in your desired location"
-                ></TextInput>
-              </View>
-
-              <Pressable
-                onPress={updateLocation}
-                style={({ pressed }) => [
-                  pressed && design.pressed,
-                  { opacity: 1 },
-                ]}
-              >
-                <View onPress={updateLocation} style={design.inputContainer}>
-                  <Text style={[design.textInput]}>or share your location</Text>
-                </View>
-              </Pressable>
-              <View
-                style={[
-                  design.buttonUpdateLocation,
-                  {
-                    backgroundColor: "green",
-                    transform: [{ translateY: 113 }],
-                    zIndex: -10,
-                    position: "absolute",
-                  },
-                ]}
-              >
-                <Text
-                  style={[
-                    design.textInput,
-                    {
-                      backgroundColor: "green",
-                    },
-                  ]}
-                >
-                  or share your location
-                </Text>
-              </View>
-
               <View
                 style={{
-                  // marginTop: 20,
+                  marginTop: -40,
                   // marginBottom: 30,
                   padding: 20,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <ActionButton cta="update your location"></ActionButton>
+                <ActionButton
+                  onPress={goToSports}
+                  cta="update your sports"
+                ></ActionButton>
               </View>
-            </View>
-            <View style={[design.centered, { marginTop: -17 }]}>
-              <MaterialIcons
-                name="highlight-remove"
-                size={30}
-                style={styles.removeIcon}
-                onPress={pickImage}
-              />
-              <Image
-                source={{ uri: `data:image/png;base64,${tempUserImage}` }}
+              <View
                 style={{
-                  width: 300,
-                  height: 350,
-                  borderRadius: 5,
-                  margin: 35,
-                  borderWidth: 0.8,
-                  borderColor: Color.color1,
+                  marginTop: -40,
+                  // marginBottom: 30,
+                  padding: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
-              />
-              <Text style={design.smallText}>
-                Click on the icon in top right corner to update your pic.
-              </Text>
+              >
+                <ActionButton
+                  onPress={goToImage}
+                  cta="update your image"
+                ></ActionButton>
+              </View>
+              <View
+                style={{
+                  marginTop: -40,
+                  // marginBottom: 30,
+                  padding: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <ActionButton
+                  onPress={goToLocation}
+                  cta="update your location"
+                ></ActionButton>
+              </View>
             </View>
 
             <View
               style={{
-                marginTop: 20,
-                marginBottom: 30,
+                marginTop: -40,
+
                 padding: 20,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
               <ActionButton
-                onPress={updateImage}
-                cta="update your image"
+                onPress={goToBio}
+                cta="update your bio"
               ></ActionButton>
+            </View>
+            <View>
+              <View style={[styles.thinRectangle, { marginTop: 0 }]}></View>
             </View>
             <View
               style={{
-                marginTop: 20,
+                marginTop: 10,
+
+                padding: 20,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ActionButton onPress={logOut} cta="log out"></ActionButton>
+            </View>
+
+            <View
+              style={{
+                marginTop: -40,
                 marginBottom: 30,
                 padding: 20,
                 alignItems: "center",
@@ -381,7 +255,7 @@ const EditYourProfile = ({ navigation }) => {
               }}
             >
               <ActionButton
-                onPress={updateImage}
+                onPress={deleteUser}
                 cta="delete the account. bye."
               ></ActionButton>
             </View>
@@ -451,7 +325,7 @@ const design = StyleSheet.create({
   },
   centered: {
     overflow: "visible",
-    marginTop: 30,
+    marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -526,6 +400,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginLeft: 20,
   },
+  thinRectangle: {
+    height: 3,
+    width: 340,
+    backgroundColor: Color.fontBodyColor,
+    backgroundColor: Color.color1,
+    borderRadius: 50,
+  },
 });
 
 const Item = ({
@@ -545,34 +426,94 @@ const Item = ({
   yes,
   no,
   goToName,
+  goToImage,
+  goToSports,
+  goToAge,
+  goToBio,
+  userCity,
 }) => {
   return (
     <View style={styles.container}>
-      <Image
-        // source={{ uri: image }}
-        source={{ uri: `data:image/png;base64,${image}` }}
-        style={{
-          width: 300,
-          height: 300,
-          borderRadius: 5,
-          margin: 30,
-          borderWidth: 0.8,
-          borderColor: Color.color1,
-        }}
-      />
-
-      <View>
-        <Text
-          onPress={goToName}
-          style={[Style.headline, { marginTop: 0, marginBottom: 10 }]}
+      <View onPress={goToImage}>
+        <View
+          style={{
+            zIndex: 10,
+            position: "absolute",
+            marginTop: 200,
+            marginLeft: 160,
+          }}
         >
-          {name}, {age}
-        </Text>
+          <MaterialIcons
+            name="highlight-remove"
+            size={30}
+            style={styles.removeIcon}
+            onPress={goToImage}
+          />
+        </View>
+        <Image
+          // source={{ uri: image }}
+          source={{ uri: `data:image/png;base64,${image}` }}
+          style={{
+            width: 300,
+            height: 300,
+            borderRadius: 5,
+            margin: 30,
+            borderWidth: 0.8,
+            borderColor: Color.color1,
+          }}
+        />
+      </View>
+      <View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            onPress={goToName}
+            style={[
+              Style.headline,
+              {
+                marginTop: 0,
+                marginBottom: 10,
+                marginLeft: 0,
+                marginRight: 10,
+              },
+            ]}
+          >
+            {name},
+          </Text>
+          <Text
+            onPress={goToAge}
+            style={[
+              Style.headline,
+              { marginTop: 0, marginBottom: 10, marginLeft: 0, marginRight: 0 },
+            ]}
+          >
+            {age}
+          </Text>
+        </View>
+        <View
+          style={{
+            justifyContent: "center",
 
-        <View style={styles.sportContainer}>
+            alignItems: "center",
+            marginBottom: 20,
+            marginTop: 10,
+          }}
+        >
+          <Text onPress={goToBio} style={styles.smallText}>
+            Hey I'm Klem and I'm looking for new friends.
+          </Text>
+        </View>
+        <View onPress={goToSports} style={styles.sportContainer}>
           <View style={styles.sport}>
-            <Text style={styles.text}>{sports[0]}</Text>
-            <View style={styles.stars}>
+            <Text onPress={goToSports} style={styles.text}>
+              {sports[0]}
+            </Text>
+            {/* <View style={styles.stars}>
               <AntDesign
                 name="star"
                 margin={1}
@@ -591,11 +532,16 @@ const Item = ({
                 size={15}
                 color={Color.color1}
               />
-            </View>
+            </View> */}
           </View>
-          <View style={[styles.sport, { marginBottom: 30 }]}>
-            <Text style={styles.text}>{sports[1]}</Text>
-            <View style={styles.stars}>
+          <View
+            onPress={goToSports}
+            style={[styles.sport, { marginBottom: 30 }]}
+          >
+            <Text onPress={goToSports} style={styles.text}>
+              {sports[1]}
+            </Text>
+            {/* <View style={styles.stars}>
               <AntDesign
                 name="star"
                 margin={1}
@@ -614,7 +560,24 @@ const Item = ({
                 size={15}
                 color={Color.color1}
               />
-            </View>
+            </View> */}
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+
+              alignItems: "center",
+              flexDirection: "row",
+            }}
+          >
+            <Entypo
+              name="location-pin"
+              size={24}
+              color={Color.color2}
+              marginRight={3}
+              marginBottom={7}
+            />
+            <Text style={styles.smallText}>{userCity}</Text>
           </View>
         </View>
       </View>

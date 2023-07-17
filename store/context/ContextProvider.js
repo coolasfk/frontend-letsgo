@@ -28,6 +28,7 @@ const ContextProvider = ({ children }) => {
   const [arrayWithMyFriendsId, setArrayWithMyFriendsId] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [bio, setBio] = useState("");
 
   return (
     <Context.Provider
@@ -78,6 +79,8 @@ const ContextProvider = ({ children }) => {
         setEmail,
         password,
         setPassword,
+        bio,
+        setBio,
       }}
     >
       {children}

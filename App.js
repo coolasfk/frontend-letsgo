@@ -16,12 +16,16 @@ import {
 const Stack = createNativeStackNavigator();
 import WelcomeScreen from "./components/WelcomeScreen";
 import RegisterSignUp from "./components/RegisterSignUp";
-import FindBuddy from "./components/FindBuddy";
+import AfterLoginPage from "./components/AfterLoginPage";
 import OldFriends from "./components/MyFriends";
 import EditYourProfile from "./components/EditYourProfile";
 import LoginPage from "./components/LoginPage";
 import EditName from "./components/editYourProfileComponents/EditName";
 import EditAge from "./components/editYourProfileComponents/EditAge";
+import EditLocation from "./components/editYourProfileComponents/EditLocation";
+import EditSports from "./components/editYourProfileComponents/EditSports";
+import EditImage from "./components/editYourProfileComponents/EditImage";
+import EditBio from "./components/editYourProfileComponents/EditBio";
 
 const App = () => {
   let [fontsLoaded] = useFonts({
@@ -32,7 +36,7 @@ const App = () => {
     Quicksand_700Bold,
   });
 
-  console.log("is mu console working");
+  ("is mu console working");
 
   if (!fontsLoaded) {
     return null;
@@ -55,8 +59,8 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="FindBuddy"
-            component={FindBuddy}
+            name="AfterLoginPage"
+            component={AfterLoginPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen
@@ -82,6 +86,26 @@ const App = () => {
           <Stack.Screen
             name="EditAge"
             component={EditAge}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditLocation"
+            component={EditLocation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditSports"
+            component={EditSports}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditImage"
+            component={EditImage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditBio"
+            component={EditBio}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

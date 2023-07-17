@@ -32,20 +32,41 @@ const EditName = ({ navigation }) => {
     base64,
     userImage,
     setUserImage,
+    userName,
+    setUserName,
   } = UseContextHook();
 
-  const [textInputName, setTextInputName] = useState("");
+  const [tempName, setTempName] = useState("");
+  const [text, setText] = useState("Fancy New Username?");
 
-  let isPressed;
-  const namePressed = () => {};
+  //   let isPressed;
+  //   const namePressed = () => {};
 
   const handleTextInput = (newText) => {
-    setUserData({ ...userData, name: newText });
-    setTextInputName(newText);
+    setTempName(newText);
   };
 
   const goBack = () => {
     navigation.navigate("EditYourProfile");
+  };
+
+  const updateNameServer = async () => {
+    try {
+      let updatedName = await axios.put(
+        "https://lestgo--coolasfk.repl.co/users/updateName/",
+        { name: tempName }
+      );
+      if (updatedName) {
+        setUserName(tempName);
+        user.name = tempName;
+        setText(`Yeah, ${tempName}. Your name was successfully updated!`);
+        setTimeout(() => {
+          setText("Fancy New Username?");
+        }, 6000);
+      }
+    } catch (e) {
+      ("error putting name on the server", e);
+    }
   };
 
   return (
@@ -64,9 +85,7 @@ const EditName = ({ navigation }) => {
         >
           <BackArrow onPress={goBack} />
         </View>
-        <Text style={[Style.headline, { marginTop: 20 }]}>
-          Fancy New Username?
-        </Text>
+        <Text style={[Style.headline, { marginTop: 20 }]}>{text}</Text>
 
         <View style={design.centered}>
           <View style={design.inputContainer}>
@@ -74,9 +93,9 @@ const EditName = ({ navigation }) => {
               autoCorrect={false}
               maxLength={25}
               onChangeText={handleTextInput}
-              onPress={namePressed}
+              //   onPress={namePressed}
               style={design.textInput}
-              placeholder={user.name}
+              placeholder={userName}
             ></TextInput>
           </View>
           <Pressable
@@ -91,7 +110,10 @@ const EditName = ({ navigation }) => {
                 justifyContent: "center",
               }}
             >
-              <ActionButton cta="update your name"></ActionButton>
+              <ActionButton
+                onPress={updateNameServer}
+                cta="update your name"
+              ></ActionButton>
             </View>
           </Pressable>
           <View style={{ marginTop: 90 }}>

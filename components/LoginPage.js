@@ -23,15 +23,15 @@ const LoginPage = ({ navigation, cta }) => {
 
   const [displayEmail, setDisplayEmail] = useState("none");
   const [displayPassword, setDisplayPassword] = useState("none");
+  const [text, setText] = useState("Hope you still remember your details");
 
   const handleEmail = (newText) => {
     setEmail(newText);
     const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    // console.log("------userData email", userData);
+
     if (emailPattern.test(email)) {
       setDisplayEmail("flex");
       saveEmailAndPass();
-      //   Alert.alert("Valid Email", "The email address is valid.");
     } else {
       setDisplayEmail("none");
     }
@@ -46,8 +46,8 @@ const LoginPage = ({ navigation, cta }) => {
     }
   };
 
-  const goToFindBuddy = () => {
-    navigation.navigate("FindBuddy");
+  const goToAfterLoginPage = () => {
+    navigation.navigate("AfterLoginPage");
   };
 
   const goBack = () => {
@@ -56,24 +56,16 @@ const LoginPage = ({ navigation, cta }) => {
 
   const saveEmailAndPass = async () => {
     try {
-      // const email = JSON.stringify(userData.email1)
       await AsyncStorage.setItem("email", email);
-      // const password = JSON.stringify(userData.password)
+
       await AsyncStorage.setItem("password", password);
     } catch (e) {
-      console.log(e);
+      e;
     }
   };
 
   const isUserInDBLogIn = async () => {
-    console.log("email & password", email, password);
-
-    // let email = await AsyncStorage.getItem("email");
-    // let password = await AsyncStorage.getItem("password");
-    // console.log("email & password", email, password);
-    // email = "a";
-    // password = "a";
-
+    console.log("email & pass", email, password);
     let result;
 
     try {
@@ -86,11 +78,11 @@ const LoginPage = ({ navigation, cta }) => {
         console.log("user not found");
         return;
       } else {
-        console.log("result", result.data);
-        goToFindBuddy();
+        goToAfterLoginPage();
       }
     } catch (e) {
-      console.log("user not found", e);
+      setText("User not found! Try again or reset your password");
+      console.log("user not found catch", e);
     }
   };
 
@@ -108,7 +100,7 @@ const LoginPage = ({ navigation, cta }) => {
         <BackArrow onPress={goBack} />
       </View>
       <Text style={[Style.headline, { marginTop: 5, marginBottom: 20 }]}>
-        Hope you still remember your details
+        {text}
       </Text>
 
       <View>
@@ -129,9 +121,8 @@ const LoginPage = ({ navigation, cta }) => {
             display={displayEmail}
           />
         </View>
-        </View>
-        <View>
-
+      </View>
+      <View>
         <View style={design.inputContainer}>
           <TextInput
             autoCorrect={false}

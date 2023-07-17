@@ -13,8 +13,8 @@ import { UseContextHook, useState } from "../store/context/ContextProvider";
 import Style from "../style/Style";
 import React, { useEffect } from "react";
 import axios from "axios";
-import MyFriends from "./MyFriends";
 
+import { Entypo } from "@expo/vector-icons";
 const SearchFriends = () => {
   let {
     user,
@@ -29,6 +29,7 @@ const SearchFriends = () => {
     setMyFriendsFetched,
     arrayWithMyFriendsId,
     setArrayWithMyFriendsId,
+    userCity,
   } = UseContextHook();
 
   const yes = (id, newUser) => {
@@ -38,12 +39,12 @@ const SearchFriends = () => {
     setFetchedUsers(newArray);
     putArrayWithMyFriendsIdOnTheServer(id);
     setMyFriendsFetched((prev) => {
-      console.log({ prev });
+      ({ prev });
       prev.push(newUser);
-      console.log({ prev });
+      ({ prev });
       return [...prev];
     });
-    console.log("fetchedFriends", arrayWithMyFriendsId);
+    "fetchedFriends", arrayWithMyFriendsId;
   };
 
   const putArrayWithMyFriendsIdOnTheServer = async (id) => {
@@ -53,12 +54,10 @@ const SearchFriends = () => {
         { newFriend: id }
       );
 
-      console.log("arrayWithMyFriendsId result", result.data);
+      "arrayWithMyFriendsId result", result.data;
     } catch (error) {
-      console.log("error putting data", error);
-    } finally {
-      console.log("arrayWithMyFriendsId SUCCESS");
-    }
+      "error putting data", error;
+    } 
   };
 
   const no = (id) => {
@@ -76,7 +75,7 @@ const SearchFriends = () => {
         { peopleIdontWannaSeeAgain: id }
       );
     } catch (error) {
-      console.log("error putting data", error);
+      "error putting data", error;
     }
   };
 
@@ -91,6 +90,7 @@ const SearchFriends = () => {
             sports={item.sports}
             image={item.image}
             id={item.id}
+            city={item.city}
             yes={() => yes(item.id, item)}
             no={() => no(item.id, item)}
           />
@@ -117,6 +117,7 @@ const Item = ({
   title,
   yes,
   no,
+  city,
 }) => {
   return (
     <View style={styles.mainContainer}>
@@ -203,6 +204,24 @@ const Item = ({
                 color={Color.color1}
               />
             </View>
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+
+              alignItems: "center",
+              flexDirection: "row",
+              marginBottom: 15, marginTop: -10,
+            }}
+          >
+            <Entypo
+              name="location-pin"
+              size={24}
+              color={Color.color2}
+              marginRight={3}
+              marginBottom={7}
+            />
+            <Text style={styles.smallText}>{city}</Text>
           </View>
         </View>
       </View>

@@ -18,7 +18,6 @@ import Color from "../style/Color";
 import { UseContextHook } from "../store/context/ContextProvider";
 import * as Location from "expo-location";
 
-
 const UserNameData = ({ cta }) => {
   let {
     setActionButtonOpacity,
@@ -50,19 +49,18 @@ const UserNameData = ({ cta }) => {
 
   ///i removed React.useState(false)
 
-  const onToggleSwitch = () => {
-    letsgo();
-    letsgo();
+  const onToggleSwitch = async () => {
+    await letsgo();
     setIsSwitchOn(!isSwitchOn);
-    console.log("isSwitchOn", isSwitchOn);
+    //"isSwitchOn", isSwitchOn;
   };
 
   let letsgo = async () => {
-    console.log("Toggle switch");
+    ("Toggle switch");
     let { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status !== "granted") {
-      console.log("function works");
+      ("function works");
       setErrorMsg("Permission to access location was denied");
       return;
     }
@@ -70,11 +68,7 @@ const UserNameData = ({ cta }) => {
     let location = await Location.getCurrentPositionAsync({});
     setLocation(location);
 
-    console.log(
-      "lon, lat",
-      location.coords.longitude,
-      location.coords.latitude
-    );
+    "lon, lat", location.coords.longitude, location.coords.latitude;
     let longitude = location.coords.longitude;
     let latitude = location.coords.latitude;
     let coordinates = [longitude, latitude];
@@ -83,45 +77,34 @@ const UserNameData = ({ cta }) => {
 
     let newCity = address[0].city;
     setCity(newCity);
-    console.log("newCity", newCity);
+    "newCity", newCity;
     setUserData({ ...userData, city: newCity });
     setUserLocation({
       type: "Point",
       coordinates: coordinates,
     });
-
-    console.log("------userLocation", userLocation);
-    /// WHY do I need to click twice so the userLoaction is shown
-
-    // fetch("https://lestgo--coolasfk.repl.co/users", {
-    //   method: "POST",
-    //   headers: { "content-type": "application/json" },
-    //   body: JSON.stringify(userLocation),
-    // }).catch((error) => {
-    //   console.error("error:", error);
-    // });
   };
   const handleTextInput = (newText) => {
     setUserData({ ...userData, name: newText });
     setTextInputName(newText);
-    // console.log("------userData name", userData);
+    // ("------userData name", userData);
   };
   const handleAgeInput = (newText) => {
     setUserData({ ...userData, age: +newText });
     setTextInputAge(newText);
-    // console.log("------userData age", userData);
+    // ("------userData age", userData);
   };
 
   const handlePassword = (newText) => {
     setUserData({ ...userData, password: newText });
     setPassword(newText);
-    // console.log("------userData pass", userData);
+    // ("------userData pass", userData);
   };
   const handleEmail = (newText) => {
     setUserData({ ...userData, email1: newText });
     setEmail(newText);
     const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    // console.log("------userData email", userData);
+    // ("------userData email", userData);
     if (emailPattern.test(email)) {
       setDisplayEmail("flex");
 
@@ -153,7 +136,7 @@ const UserNameData = ({ cta }) => {
     ) {
       setActionButtonOpacity(1);
 
-      console.log("ok");
+      ("ok");
     } else {
       setActionButtonOpacity(0.3);
     }
@@ -319,10 +302,5 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
-
-
-
-
-
 
 export default UserNameData;

@@ -51,7 +51,7 @@ const AcceptConditions = () => {
   // userData.image = base64;
   // userData.sports = chosenSports;
   // userData.location = userLocation;
-  // console.log(userData);
+  // (userData);
   // fetch("https://lestgo--coolasfk.repl.co/users", {
   //   method: "POST",
   //   headers: { "content-type": "application/json" },

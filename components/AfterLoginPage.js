@@ -11,7 +11,7 @@ import MyFriends from "./MyFriends";
 import SearchFriends from "./SearchFriends";
 
 const backendUrl = "https://lestgo--coolasfk.repl.co/users";
-const FindBuddy = ({ navigation }) => {
+const AfterLoginPage = ({ navigation }) => {
   let {
     image,
     user,
@@ -57,26 +57,26 @@ const FindBuddy = ({ navigation }) => {
   /// -------> FETCHING CURRENT USER FROM THE SERVER
 
   const stayLoggedIn = async () => {
-    console.log("stay logged in started");
+    ("stay logged in started");
 
     // let email = await AsyncStorage.getItem("email");
     // let password = await AsyncStorage.getItem("password");
-    // console.log("email & password", email, password);
+    // ("email & password", email, password);
     // email = "a";
     // password = "a";
 
     let result;
-    console.log("email", "password", email, password);
+    "email", "password", email, password;
     try {
       result = await axios.post(
         "https://lestgo--coolasfk.repl.co/users/:email1/",
         { email1: email, password: password }
       );
     } catch (e) {
-      console.log("error", e);
+      "error", e;
     } finally {
       setUser(result.data);
-      console.log("setting states");
+      ("setting states");
       setUserName(result.data.name);
       setUserCity(result.data.city);
       setUserAge(result.data.age);
@@ -94,30 +94,30 @@ const FindBuddy = ({ navigation }) => {
     stayLoggedIn();
   }, []);
 
-  console.log(
-    "user states",
-    userName,
-    userAge,
-    userSports,
-    userCity,
-    userLocationServer,
-    image
-  );
+  // (
+  //   "user states",
+  //   userName,
+  //   userAge,
+  //   userSports,
+  //   userCity,
+  //   userLocationServer,
+  //   image
+  // );
 
-  console.log("peopleIdontWannaSeeAgain", peopleIdontWannaSeeAgain);
+  "peopleIdontWannaSeeAgain", peopleIdontWannaSeeAgain;
 
   ////-----------> FETCHING ALL THE USERS FROM THE SERVER
 
   //https://lestgo.coolasfk.repl.co/users_nearby?lon=18.070568214261815&lat=53.18286155194309&distance=300000
 
   let fetchUsers = async () => {
-    console.log("fetch fetch", peopleIdontWannaSeeAgain);
+    "fetch fetch", peopleIdontWannaSeeAgain;
 
     try {
       const response = await axios.post(
         "https://lestgo--coolasfk.repl.co/users_nearby",
         // { lat: 53.18286155194309, lon: 18.070568214261815, distance: 1000 }
-        { distance: 1000 }
+        { distance: 1000, sports: userSports, location: userLocationServer }
 
         // { location: userLocation, distance: 10000 }
       );
@@ -132,6 +132,7 @@ const FindBuddy = ({ navigation }) => {
           sports: user.sports,
           image: user.image,
           friends: user.friends,
+          city: user.city,
           peopleIdontWannaSeeAgain: user.peopleIdontWannaSeeAgain,
         };
 
@@ -139,7 +140,7 @@ const FindBuddy = ({ navigation }) => {
       }
       setFetchedUsers(returnedUsers);
     } catch (e) {
-      console.log("error fetching", e);
+      "error fetching", e;
     }
   };
 
@@ -161,7 +162,7 @@ const FindBuddy = ({ navigation }) => {
       .post("https://lestgo--coolasfk.repl.co/myfriends")
       .then((response) => {
         let returnedUsers = [];
-
+        console.log(response.data, "response.data");
         for (let user of response.data) {
           const tempUser = {
             id: user._id,
@@ -170,6 +171,7 @@ const FindBuddy = ({ navigation }) => {
             age: user.age,
             sports: user.sports,
             image: user.image,
+            city: user.city,
           };
           returnedUsers.push(tempUser);
         }
@@ -315,4 +317,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-export default FindBuddy;
+export default AfterLoginPage;

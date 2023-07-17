@@ -41,11 +41,11 @@ const ImageUpload = () => {
 
       if (!result.canceled) {
         setImage(result.assets[0].uri);
-        console.log("i want to change my console log");
+        ("i want to change my ");
 
         // setImageHeight(Math.round(result.assets[0].height / 10));
         // setImageWidth(Math.round(result.assets[0].width / 10));
-        console.log(
+        (
           "height & width",
           result.assets[0].height,
           result.assets[0].width
@@ -70,21 +70,21 @@ const ImageUpload = () => {
           height = Math.round(result.assets[0].height / 2);
           width = Math.round(result.assets[0].width / 2);
         }
-        console.log("imageHeight, imageWidth", imageHeight, imageWidth);
+        ("imageHeight, imageWidth", imageHeight, imageWidth);
         setActionButtonOpacity(1);
         compressImage(result.assets[0].uri, height, width);
       }
     } catch (e) {
-      console.log("error image-upload", e);
+      ("error image-upload", e);
     }
   };
 
   const compressImage = async (imageUri, imageHeight, imageWidth) => {
-    console.log("imageHeight & Width", imageHeight, imageWidth);
-    console.log("i am trying to downscale image");
+    ("imageHeight & Width", imageHeight, imageWidth);
+    ("i am trying to downscale image");
     if (imageUri !== null) {
       try {
-        console.log("lognr4");
+        ("lognr4");
 
         const manipResult = await ImageManipulator.manipulateAsync(
           imageUri,
@@ -104,10 +104,10 @@ const ImageUpload = () => {
           }
         );
 
-        console.log("manipresult", manipResult.uri, manipResult.base64);
+        ("manipresult", manipResult.uri, manipResult.base64);
         setBase64(manipResult.base64);
       } catch (e) {
-        console.log("now what?", e);
+        ("now what?", e);
       }
     }
   };

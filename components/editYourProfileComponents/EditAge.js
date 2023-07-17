@@ -34,12 +34,10 @@ const EditAge = ({ navigation }) => {
 
   const [textInputName, setTextInputName] = useState("");
 
-  let isPressed;
-  const namePressed = () => {};
-
   const handleAgeInput = (newText) => {
-    console.log("newText", newText);
+    "newText", newText;
     setUserAge(newText);
+    console.log("userAge", userAge);
   };
 
   const goBack = () => {
@@ -47,13 +45,18 @@ const EditAge = ({ navigation }) => {
   };
 
   const updateAge = async () => {
+    console.log("trying to update");
     try {
       const sendUpdateAge = await axios.put(
-        "https://lestgo--coolasfk.repl.co/users/updateAge/",
+        "https://lestgo--coolasfk.repl.co/editYourProfile/updateAge/",
         { age: userAge }
       );
+      if (sendUpdateAge) {
+        console.log("changing user age was successful", sendUpdateAge.data.age);
+      }
+      console.log("changing user age was successful", sendUpdateAge.data.age);
     } catch (e) {
-      console.log("error updating age", e);
+      "error updating age", e;
     }
   };
 
@@ -84,7 +87,7 @@ const EditAge = ({ navigation }) => {
               maxLength={2}
               onChangeText={handleAgeInput}
               style={design.textInput}
-              placeholder={user.age.toString()}
+              placeholder={userAge.toString()}
             ></TextInput>
           </View>
           <Pressable
