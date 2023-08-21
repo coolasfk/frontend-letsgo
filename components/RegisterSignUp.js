@@ -19,7 +19,7 @@ import { UseContextHook } from "../store/context/ContextProvider";
 const windowWidth = Dimensions.get("window").width;
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
-const RegisterSignUp = ({ cta, onPress, navigation }) => {
+const RegisterSignUp = ({ navigation }) => {
   const { height, width, scale, fontScale } = useWindowDimensions();
 
   ("is mu console working2");
@@ -103,7 +103,7 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
   };
 
   const sendDataToServer = async () => {
-    console.log(userData);
+    console.log(userData.password, userData.email1, "email", "pass");
 
     // userData.image = base64;
     // userData.sports = chosenSports;
@@ -122,12 +122,22 @@ const RegisterSignUp = ({ cta, onPress, navigation }) => {
         password: userData.password,
       });
 
-      if (data) {
+      if (data.status === 200) {
+        console.log(data, "data");
+
         navigation.navigate("AfterLoginPage");
         console.log("user added");
+      } else {
+        console.log("user already exists");
+        // return;
       }
-    } catch (e) {
-      console.log("error updating userData", e);
+    } catch (error) {
+      console.log("error Status", error.response.status);
+      if (error.response.status === 403) {
+        alert("Hey mate, looks like you have already registered!");
+      } else {
+        alert("Ooops something went wrong, check your connection & try again.");
+      }
     }
   };
 

@@ -30,6 +30,11 @@ import EditName from "./editYourProfileComponents/EditName";
 import { AntDesign } from "@expo/vector-icons";
 import UserNameData from "./UserNameData";
 
+
+
+
+
+
 const EditYourProfile = ({ navigation }) => {
   let { width } = useWindowDimensions();
   let {

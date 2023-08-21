@@ -13,9 +13,10 @@ import { UseContextHook, useState } from "../store/context/ContextProvider";
 import Style from "../style/Style";
 import React, { useEffect } from "react";
 import axios from "axios";
+import MyFriends from "./MyFriends";
 
 import { Entypo } from "@expo/vector-icons";
-const SearchFriends = () => {
+const SearchFriends = ({ navigation }) => {
   let {
     user,
     setUser,
@@ -30,6 +31,8 @@ const SearchFriends = () => {
     arrayWithMyFriendsId,
     setArrayWithMyFriendsId,
     userCity,
+    setUserId,
+    userId,
   } = UseContextHook();
 
   const yes = (id, newUser) => {
@@ -38,13 +41,19 @@ const SearchFriends = () => {
     setArrayWithMyFriendsId([...arrayWithMyFriendsId, id]);
     setFetchedUsers(newArray);
     putArrayWithMyFriendsIdOnTheServer(id);
+
     setMyFriendsFetched((prev) => {
-      ({ prev });
-      prev.push(newUser);
-      ({ prev });
+      console.log("newUser", newUser.friends);
+      let arrayFriends = newUser.friends;
+      if (arrayFriends.includes(userId)) {
+        console.log("userId", userId, "yes");
+        prev.push(newUser);
+      } else {
+        console.log("no", userId);
+      }
+
       return [...prev];
     });
-    "fetchedFriends", arrayWithMyFriendsId;
   };
 
   const putArrayWithMyFriendsIdOnTheServer = async (id) => {
@@ -57,7 +66,7 @@ const SearchFriends = () => {
       "arrayWithMyFriendsId result", result.data;
     } catch (error) {
       "error putting data", error;
-    } 
+    }
   };
 
   const no = (id) => {
@@ -93,6 +102,7 @@ const SearchFriends = () => {
             city={item.city}
             yes={() => yes(item.id, item)}
             no={() => no(item.id, item)}
+            bioFriend={item.bio}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -118,6 +128,7 @@ const Item = ({
   yes,
   no,
   city,
+  bioFriend,
 }) => {
   return (
     <View style={styles.mainContainer}>
@@ -157,7 +168,21 @@ const Item = ({
         <Text style={[Style.headline, { marginTop: 0, marginBottom: 10 }]}>
           {name}, {age}
         </Text>
+        <View
+          style={
+            bioFriend
+              ? {
+                  justifyContent: "center",
 
+                  alignItems: "center",
+                  marginBottom: 20,
+                  marginTop: 10,
+                }
+              : { display: "none" }
+          }
+        >
+          <Text style={styles.smallText}>{bioFriend}</Text>
+        </View>
         <View style={styles.sportContainer}>
           <View style={styles.sport}>
             <Text style={styles.text}>{sports[0]}</Text>
@@ -211,7 +236,8 @@ const Item = ({
 
               alignItems: "center",
               flexDirection: "row",
-              marginBottom: 15, marginTop: -10,
+              marginBottom: 15,
+              marginTop: -10,
             }}
           >
             <Entypo

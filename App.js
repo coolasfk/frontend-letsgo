@@ -26,6 +26,11 @@ import EditLocation from "./components/editYourProfileComponents/EditLocation";
 import EditSports from "./components/editYourProfileComponents/EditSports";
 import EditImage from "./components/editYourProfileComponents/EditImage";
 import EditBio from "./components/editYourProfileComponents/EditBio";
+import ResetPassPage from "./components/ResetPassPage";
+import SendEmailToResetPassword from "./components/SendEmailToResetPassword";
+import Chat from "./components/Chat";
+import MyFriends from "./components/MyFriends";
+import DeleteFriend from "./components/DeleteFriend";
 
 const App = () => {
   let [fontsLoaded] = useFonts({
@@ -106,6 +111,32 @@ const App = () => {
           <Stack.Screen
             name="EditBio"
             component={EditBio}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ResetPassPage"
+            component={ResetPassPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SendEmailToResetPassword"
+            component={SendEmailToResetPassword}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="MyFriends"
+            component={MyFriends}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="DeleteFriend"
+            component={DeleteFriend}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

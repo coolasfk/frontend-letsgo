@@ -15,11 +15,31 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 
-const MyFriends = () => {
-  let { myFriendsFetched, bio, setBio } = UseContextHook();
+const MyFriends = ({ navigation }) => {
+  let {
+    myFriendsFetched,
+    bio,
+    setBio,
+    setFriendId,
+    setFriendName,
+    setFriendImage,
+    setFriendBio,
+    setFriendAge,
+    setFriendSports,
+    setFriendCity,
+  } = UseContextHook();
 
-  const messageFriend = () => {
-    ("i am messaging my friends here");
+  const goToChat = (id, name, image, bio, age, sports, city) => {
+    setFriendId(id);
+    setFriendName(name);
+    setFriendImage(image);
+    setFriendBio(bio);
+    setFriendAge(age);
+    setFriendSports(sports);
+    setFriendCity(city);
+    console.log("id", id, "logged id");
+    navigation.navigate("Chat");
+    console.log("a");
   };
 
   return (
@@ -32,9 +52,20 @@ const MyFriends = () => {
             age={item.age}
             sports={item.sports}
             image={item.image}
-            messageFriend={messageFriend}
-            bio={item.bio}
             city={item.city}
+            id={item.id}
+            bioFriend={item.bio}
+            goToChat={() =>
+              goToChat(
+                item.id,
+                item.name,
+                item.image,
+                item.bioFriend,
+                item.age,
+                item.sports,
+                item.city
+              )
+            }
           />
         )}
         keyExtractor={(item) => item.id}
@@ -49,7 +80,7 @@ const Item = ({
   age,
   sports,
   image,
-  bio,
+  bioFriend,
   location,
   colorStars1,
   colorStars2,
@@ -58,7 +89,7 @@ const Item = ({
   colorStars5,
   colorStars6,
   title,
-  messageFriend,
+  goToChat,
   city,
 }) => {
   return (
@@ -78,10 +109,10 @@ const Item = ({
 
       <View>
         <View style={styles.containerYesNo}>
-          <View id={id} style={styles.yes} onPress={messageFriend}>
+          <View id={id} style={styles.yes} onPress={goToChat}>
             <AntDesign
               id={id}
-              onPress={messageFriend}
+              onPress={goToChat}
               name="message1"
               size={43}
               color={Color.color10}
@@ -92,6 +123,21 @@ const Item = ({
           {name}, {age}
         </Text>
 
+        <View
+          style={
+            bioFriend
+              ? {
+                  justifyContent: "center",
+
+                  alignItems: "center",
+                  marginBottom: 20,
+                  marginTop: 10,
+                }
+              : { display: "none" }
+          }
+        >
+          <Text style={styles.smallText}>{bioFriend}</Text>
+        </View>
         <View style={styles.sportContainer}>
           <View style={styles.sport}>
             <Text style={styles.text}>{sports[0]}</Text>

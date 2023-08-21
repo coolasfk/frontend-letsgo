@@ -2,12 +2,11 @@ import { View, Text, Image, StyleSheet, Button, Pressable } from "react-native";
 import Color from "../style/Color";
 import { useState, useEffect, useRef } from "react";
 import { UseContextHook } from "../store/context/ContextProvider";
-
+import MyFriends from "./MyFriends";
 import axios from "axios";
 import Style from "../style/Style";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
-import NewFriends from "./SearchFriends";
-import MyFriends from "./MyFriends";
+
 import SearchFriends from "./SearchFriends";
 
 const backendUrl = "https://lestgo--coolasfk.repl.co/users";
@@ -39,6 +38,7 @@ const AfterLoginPage = ({ navigation }) => {
     fetchedUsers,
     setFetchedUsers,
     userFriends,
+
     setUserFriends,
     peopleIdontWannaSeeAgain,
     setpeopleIdontWannaSeeAgain,
@@ -50,6 +50,8 @@ const AfterLoginPage = ({ navigation }) => {
     setEmail,
     password,
     setPassword,
+    setUserId,
+    userId,
   } = UseContextHook();
 
   const [isNewFriendsOn, setIsNewFriendsOn] = useState(null);
@@ -58,12 +60,6 @@ const AfterLoginPage = ({ navigation }) => {
 
   const stayLoggedIn = async () => {
     ("stay logged in started");
-
-    // let email = await AsyncStorage.getItem("email");
-    // let password = await AsyncStorage.getItem("password");
-    // ("email & password", email, password);
-    // email = "a";
-    // password = "a";
 
     let result;
     "email", "password", email, password;
@@ -85,7 +81,7 @@ const AfterLoginPage = ({ navigation }) => {
 
       setUserImage(result.data.image);
       setUserLocationServer(result.data.location);
-
+      setUserId(result.data._id);
       setUserFriends(result.data.friends);
     }
   };
@@ -93,16 +89,6 @@ const AfterLoginPage = ({ navigation }) => {
   useEffect(() => {
     stayLoggedIn();
   }, []);
-
-  // (
-  //   "user states",
-  //   userName,
-  //   userAge,
-  //   userSports,
-  //   userCity,
-  //   userLocationServer,
-  //   image
-  // );
 
   "peopleIdontWannaSeeAgain", peopleIdontWannaSeeAgain;
 
@@ -116,10 +102,8 @@ const AfterLoginPage = ({ navigation }) => {
     try {
       const response = await axios.post(
         "https://lestgo--coolasfk.repl.co/users_nearby",
-        // { lat: 53.18286155194309, lon: 18.070568214261815, distance: 1000 }
-        { distance: 1000, sports: userSports, location: userLocationServer }
 
-        // { location: userLocation, distance: 10000 }
+        { distance: 1000, sports: userSports, location: userLocationServer }
       );
       let returnedUsers = [];
 
@@ -162,7 +146,7 @@ const AfterLoginPage = ({ navigation }) => {
       .post("https://lestgo--coolasfk.repl.co/myfriends")
       .then((response) => {
         let returnedUsers = [];
-        console.log(response.data, "response.data");
+
         for (let user of response.data) {
           const tempUser = {
             id: user._id,
@@ -172,6 +156,7 @@ const AfterLoginPage = ({ navigation }) => {
             sports: user.sports,
             image: user.image,
             city: user.city,
+            bioFriend: user.bio,
           };
           returnedUsers.push(tempUser);
         }
@@ -257,7 +242,10 @@ const AfterLoginPage = ({ navigation }) => {
       {isNewFriendsOn ? (
         <SearchFriends fetchedUsers={fetchedUsers} />
       ) : (
-        <MyFriends myFriendsFetched={myFriendsFetched} />
+        <MyFriends
+          myFriendsFetched={myFriendsFetched}
+          navigation={navigation}
+        />
       )}
     </View>
   );

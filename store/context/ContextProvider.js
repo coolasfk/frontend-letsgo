@@ -29,6 +29,16 @@ const ContextProvider = ({ children }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [bio, setBio] = useState("");
+  const [codeToResetPass, setCodeToResetPass] = useState("");
+  const [userId, setUserId] = useState("");
+  const [friendId, setFriendId] = useState("");
+  const [friendName, setFriendName] = useState("");
+  const [friendImage, setFriendImage] = useState("");
+  const [friendBio, setFriendBio] = useState("");
+  const [friendAge, setFriendAge] = useState("");
+  const [friendSports, setFriendSports] = useState("");
+  const [friendCity, setFriendCity] = useState("");
+  const [messages, setMessages] = useState([]);
 
   return (
     <Context.Provider
@@ -81,6 +91,26 @@ const ContextProvider = ({ children }) => {
         setPassword,
         bio,
         setBio,
+        codeToResetPass,
+        setCodeToResetPass,
+        setUserId,
+        userId,
+        friendId,
+        setFriendId,
+        friendName,
+        setFriendName,
+        friendImage,
+        setFriendImage,
+        friendBio,
+        setFriendBio,
+        friendAge,
+        setFriendAge,
+        friendSports,
+        setFriendSports,
+        friendCity,
+        setFriendCity,
+        messages,
+        setMessages,
       }}
     >
       {children}

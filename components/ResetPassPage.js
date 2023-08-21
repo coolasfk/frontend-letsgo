@@ -16,80 +16,57 @@ import axios from "axios";
 import ActionButton from "../components/ActionButton";
 import { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import UserNameData from "./UserNameData";
 
-const LoginPage = ({ navigation, cta }) => {
-  let { email, setEmail, password, setPassword, userName, setUserName } =
-    UseContextHook();
+const ResetPassPage = ({ navigation, cta }) => {
+  let { email, setEmail, password, setPassword } = UseContextHook();
   const { height, width, scale, fontScale } = useWindowDimensions();
-
-  const [displayEmail, setDisplayEmail] = useState("none");
+  let [password2, setPassword2] = useState("");
   const [displayPassword, setDisplayPassword] = useState("none");
-  const [text, setText] = useState("Hope you still remember your details");
+  const [displayPassword2, setDisplayPassword2] = useState("none");
+  const [text, setText] = useState("Create a password you will remember");
 
-  const handleEmail = (newText) => {
-    setEmail(newText);
-    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-
-    if (emailPattern.test(email)) {
-      setDisplayEmail("flex");
-      saveEmailAndPass();
-    } else {
-      setDisplayEmail("none");
-    }
-  };
   const handlePassword = (newText) => {
     setPassword(newText);
     if (password.length >= 2) {
-      saveEmailAndPass();
       setDisplayPassword("flex");
     } else {
       setDisplayPassword("none");
     }
   };
 
-  const goToAfterLoginPage = () => {
-    navigation.navigate("AfterLoginPage");
+  const handlePassword2 = (nextText) => {
+    setPassword2(nextText);
+    if (password.length >= 2) {
+      setDisplayPassword2("flex");
+    } else {
+      setDisplayPassword2("none");
+    }
   };
 
   const goBack = () => {
-    navigation.navigate("WelcomeScreen");
+    navigation.navigate("LoginPage");
   };
 
-  const saveEmailAndPass = async () => {
+  const updatePass = async () => {
+    console.log("email&pass", email, password);
     try {
-      await AsyncStorage.setItem("email", email);
-
-      await AsyncStorage.setItem("password", password);
-    } catch (e) {
-      e;
-    }
-  };
-
-  const isUserInDBLogIn = async () => {
-    console.log("email & pass", email, password);
-    let result;
-
-    try {
-      result = await axios.post(
-        "https://lestgo--coolasfk.repl.co/users/:email1/",
-        { email1: email, password: password }
-      );
-
-      if (result === null || undefined) {
-        console.log("user not found");
-        return;
+      if (password === password2) {
+        const newPass = await axios.put(
+          "https://lestgo--coolasfk.repl.co/updatePassword/",
+          { email: email, password: password }
+        );
+        if (newPass) {
+          navigation.navigate("LoginPage");
+        }
+      } else if (password !== password2) {
+        setText("Passwords do not match");
       } else {
-        goToAfterLoginPage();
+        console.log("error updating password");
+        setText("Something went wrong, try again!");
       }
-    } catch (e) {
-      setText("User not found! Try again or reset your password");
-      console.log("user not found catch", e);
+    } catch (error) {
+      console.log(error, "cannot update the password");
     }
-  };
-
-  const goSendEmailToResetPage = () => {
-    navigation.navigate("SendEmailToResetPassword");
   };
 
   return (
@@ -108,26 +85,6 @@ const LoginPage = ({ navigation, cta }) => {
       <Text style={[Style.headline, { marginTop: 5, marginBottom: 20 }]}>
         {text}
       </Text>
-
-      <View>
-        <View style={design.inputContainer}>
-          <TextInput
-            autoCorrect={false}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            maxLength={40}
-            onChangeText={handleEmail}
-            style={design.textInput}
-            placeholder="type in your email"
-          ></TextInput>
-          <Ionicons
-            name="checkmark-circle-outline"
-            size={30}
-            color={"green"}
-            display={displayEmail}
-          />
-        </View>
-      </View>
       <View>
         <View style={design.inputContainer}>
           <TextInput
@@ -136,7 +93,25 @@ const LoginPage = ({ navigation, cta }) => {
             maxLength={25}
             onChangeText={handlePassword}
             style={design.textInput}
-            placeholder="type in your password"
+            placeholder="type your new password here"
+          ></TextInput>
+          <Ionicons
+            name="checkmark-circle-outline"
+            size={30}
+            color="green"
+            display={displayPassword}
+          />
+        </View>
+      </View>
+      <View>
+        <View style={design.inputContainer}>
+          <TextInput
+            autoCorrect={false}
+            autoCapitalize="none"
+            maxLength={30}
+            onChangeText={handlePassword2}
+            style={design.textInput}
+            placeholder="type it again ;)"
           ></TextInput>
           <Ionicons
             name="checkmark-circle-outline"
@@ -155,13 +130,7 @@ const LoginPage = ({ navigation, cta }) => {
           justifyContent: "center",
         }}
       >
-        <ActionButton cta={"enter"} onPress={isUserInDBLogIn} />
-
-        <ActionButton
-          cta={"oops I don't remember"}
-          // onPress={goToResetPassPage}
-          onPress={goSendEmailToResetPage}
-        />
+        <ActionButton cta={"save my new pass"} onPress={updatePass} />
       </View>
     </View>
   );
@@ -240,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default ResetPassPage;

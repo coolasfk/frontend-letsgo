@@ -18,6 +18,9 @@ import Color from "../style/Color";
 import { UseContextHook } from "../store/context/ContextProvider";
 import * as Location from "expo-location";
 
+// const bcrypt = require("bcrypt");
+// const saltRounds = 10;
+
 const UserNameData = ({ cta }) => {
   let {
     setActionButtonOpacity,
@@ -79,8 +82,12 @@ const UserNameData = ({ cta }) => {
     setCity(newCity);
     "newCity", newCity;
     setUserData({ ...userData, city: newCity });
+    // setUserLocation({
+    //   // type: "Point",
+    //   coordinates: coordinates,
+    // });
     setUserLocation({
-      type: "Point",
+      // type: "Point",
       coordinates: coordinates,
     });
   };
@@ -96,6 +103,8 @@ const UserNameData = ({ cta }) => {
   };
 
   const handlePassword = (newText) => {
+    // let hash = bcrypt.hashSync(newText, salt);
+    // console.log("hash", hash);
     setUserData({ ...userData, password: newText });
     setPassword(newText);
     // ("------userData pass", userData);
