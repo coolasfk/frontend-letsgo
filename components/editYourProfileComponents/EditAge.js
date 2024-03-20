@@ -30,6 +30,7 @@ const EditAge = ({ navigation }) => {
     setUserAge,
     userAge,
     user,
+    path
   } = UseContextHook();
 
   const [textInputName, setTextInputName] = useState("");
@@ -48,7 +49,8 @@ const EditAge = ({ navigation }) => {
     console.log("trying to update");
     try {
       const sendUpdateAge = await axios.put(
-        "https://lestgo--coolasfk.repl.co/editYourProfile/updateAge/",
+        //"https://lestgo--coolasfk.repl.co/editYourProfile/updateAge/",
+        `${path}editYourProfile/updateAge/`,
         { age: userAge }
       );
       if (sendUpdateAge) {

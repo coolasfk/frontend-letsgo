@@ -23,6 +23,7 @@ const DeleteFriend = ({ navigation }) => {
     friendAge,
     friendSports,
     friendCity,
+    path
   } = UseContextHook();
 
   const goBack = () => {
@@ -32,7 +33,8 @@ const DeleteFriend = ({ navigation }) => {
   const deleteFriend = async () => {
     try {
       let deletedFriend = await axios.delete(
-        `https://lestgo--coolasfk.repl.co/deleteFriend`,
+        //`https://lestgo--coolasfk.repl.co/deleteFriend`,
+        `${path}deleteFriend`,
         { friendId: friendId }
       );
       console.log("deleted friend?", deletedFriend);

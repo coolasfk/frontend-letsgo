@@ -35,7 +35,7 @@ import uuid from "react-native-uuid";
 import socketIOClient from "socket.io-client";
 
 const ENDPOINT = "https://lestgo.coolasfk.repl.co";
-
+//const ENDPOINT = `${path}`;
 // import { io } from "socket.io-client";
 
 // const ENDPOINT = socketIOClient("ws://lestgo.coolasfk.repl.co");
@@ -142,7 +142,8 @@ const Chat = ({ navigation }) => {
     console.log("fetching messages");
     try {
       const response = await axios.get(
-        `https://lestgo--coolasfk.repl.co/messages/${userId}/${friendId}`
+        //`https://lestgo--coolasfk.repl.co/messages/${userId}/${friendId}`
+        `${path}messages/${userId}/${friendId}`,
       );
 
       const messagesData = response.data.map((message) => ({
@@ -176,7 +177,8 @@ const Chat = ({ navigation }) => {
 
     try {
       const response = await axios.post(
-        `https://lestgo--coolasfk.repl.co/messages/`,
+        //`https://lestgo--coolasfk.repl.co/messages/`,
+        `${userId}messages/`,
 
         {
           text: newMessages[0].text,

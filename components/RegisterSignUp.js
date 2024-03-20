@@ -18,7 +18,9 @@ import { useState } from "react";
 import { UseContextHook } from "../store/context/ContextProvider";
 const windowWidth = Dimensions.get("window").width;
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import axios from "axios";
+//import axios from "axios";
+import axios, { isCancel, AxiosError } from "axios";
+
 const RegisterSignUp = ({ navigation }) => {
   const { height, width, scale, fontScale } = useWindowDimensions();
 
@@ -42,6 +44,8 @@ const RegisterSignUp = ({ navigation }) => {
     setCity,
     cityText,
     setCityText,
+    path,
+    setPath,
   } = UseContextHook();
   let [steps, setSteps] = useState(0);
   let [progressText, setProgressText] = useState("1/4");
@@ -57,7 +61,6 @@ const RegisterSignUp = ({ navigation }) => {
       steps === 0
       // && image !== null
     ) {
-      ("is mu console working???");
       setSteps(width * 2);
       setActionButtonOpacity(0.3);
       setProgressText("2/4");
@@ -109,19 +112,28 @@ const RegisterSignUp = ({ navigation }) => {
     // userData.sports = chosenSports;
     // userData.location = userLocation;
     // userData.city = newCity;
+    console.log(typeof `${path}user`);
 
     try {
-      let data = await axios.post("https://lestgo--coolasfk.repl.co/users", {
-        image: base64,
-        sports: chosenSports,
-        location: userLocation,
-        city: newCity,
-        name: userData.name,
-        age: userData.age,
-        email1: userData.email1,
-        password: userData.password,
-      });
-
+      let data = await axios.post(
+        //"https://lestgo--coolasfk.repl.co/users",
+        //"https://ca9e695c-4a63-45c4-91bd-34f75c8971ed-00-1djlj2w6ltxb5.spock.path.dev/users",
+        //"http://192.168.1.157:3000/users",
+        //"https://path.com/@coolasfk/LestGo/users",
+        `${path}users`,
+        {
+          image: base64,
+          sports: chosenSports,
+          location: userLocation,
+          city: newCity,
+          name: userData.name,
+          age: userData.age,
+          email1: userData.email1,
+          password: userData.password,
+        },
+        { withCredentials: true }
+      );
+      console.log("additional check", data);
       if (data.status === 200) {
         console.log(data, "data");
 
@@ -132,7 +144,9 @@ const RegisterSignUp = ({ navigation }) => {
         // return;
       }
     } catch (error) {
-      console.log("error Status", error.response.status);
+      //console.log("error Status", error.response.status);
+      console.log("error Status", error.response.status, AxiosError);
+
       if (error.response.status === 403) {
         alert("Hey mate, looks like you have already registered!");
       } else {

@@ -39,6 +39,7 @@ const EditSports = ({ navigation }) => {
     setUserSports,
     chosenSports,
     setChosenSports,
+    path
   } = UseContextHook();
 
   const [areTwoSportsSelected, setAreTwoSportsSelected] = useState(true);
@@ -70,7 +71,8 @@ const EditSports = ({ navigation }) => {
     }
     try {
       let updatedSports = await axios.put(
-        "https://lestgo--coolasfk.repl.co/editYourProfile/updateSports/",
+        //"https://lestgo--coolasfk.repl.co/editYourProfile/updateSports/",
+        `${path}/editYourProfile/updateSports/`,
         { sports: chosenSports }
       );
       console.log("sports updated successfully");

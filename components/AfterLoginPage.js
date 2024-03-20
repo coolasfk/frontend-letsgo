@@ -9,7 +9,6 @@ import Style from "../style/Style";
 
 import SearchFriends from "./SearchFriends";
 
-const backendUrl = "https://lestgo--coolasfk.repl.co/users";
 const AfterLoginPage = ({ navigation }) => {
   let {
     image,
@@ -52,6 +51,7 @@ const AfterLoginPage = ({ navigation }) => {
     setPassword,
     setUserId,
     userId,
+    path
   } = UseContextHook();
 
   const [isNewFriendsOn, setIsNewFriendsOn] = useState(null);
@@ -59,13 +59,14 @@ const AfterLoginPage = ({ navigation }) => {
   /// -------> FETCHING CURRENT USER FROM THE SERVER
 
   const stayLoggedIn = async () => {
-    ("stay logged in started");
+    console.log("path check",  `${path}:email1/`)
 
     let result;
-    "email", "password", email, password;
+    console.log("email", "password", email, password);
     try {
       result = await axios.post(
-        "https://lestgo--coolasfk.repl.co/users/:email1/",
+        //"https://lestgo--coolasfk.repl.co/users/:email1/",
+        `${path}users/:email1/`,
         { email1: email, password: password }
       );
     } catch (e) {
@@ -90,18 +91,19 @@ const AfterLoginPage = ({ navigation }) => {
     stayLoggedIn();
   }, []);
 
-  "peopleIdontWannaSeeAgain", peopleIdontWannaSeeAgain;
+ 
 
   ////-----------> FETCHING ALL THE USERS FROM THE SERVER
 
   //https://lestgo.coolasfk.repl.co/users_nearby?lon=18.070568214261815&lat=53.18286155194309&distance=300000
 
   let fetchUsers = async () => {
-    "fetch fetch", peopleIdontWannaSeeAgain;
+   
 
     try {
       const response = await axios.post(
-        "https://lestgo--coolasfk.repl.co/users_nearby",
+        //"https://lestgo--coolasfk.repl.co/users_nearby",
+        `${path}users_nearby`,
 
         { distance: 1000, sports: userSports, location: userLocationServer }
       );
@@ -143,7 +145,8 @@ const AfterLoginPage = ({ navigation }) => {
 
   useEffect(() => {
     axios
-      .post("https://lestgo--coolasfk.repl.co/myfriends")
+      //.post("https://lestgo--coolasfk.repl.co/myfriends")
+      .post(`${path}myfriends`)
       .then((response) => {
         let returnedUsers = [];
 

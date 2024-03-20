@@ -39,6 +39,7 @@ const ContextProvider = ({ children }) => {
   const [friendSports, setFriendSports] = useState("");
   const [friendCity, setFriendCity] = useState("");
   const [messages, setMessages] = useState([]);
+  const [path, setPath] = useState("http://192.168.1.157:3000/");
 
   return (
     <Context.Provider
@@ -111,6 +112,8 @@ const ContextProvider = ({ children }) => {
         setFriendCity,
         messages,
         setMessages,
+        path,
+        setPath
       }}
     >
       {children}

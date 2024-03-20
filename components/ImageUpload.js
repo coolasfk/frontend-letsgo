@@ -41,7 +41,7 @@ const ImageUpload = () => {
 
       if (!result.canceled) {
         setImage(result.assets[0].uri);
-        ("i want to change my ");
+
 
         // setImageHeight(Math.round(result.assets[0].height / 10));
         // setImageWidth(Math.round(result.assets[0].width / 10));
@@ -75,16 +75,14 @@ const ImageUpload = () => {
         compressImage(result.assets[0].uri, height, width);
       }
     } catch (e) {
-      ("error image-upload", e);
+      console.log("error image-upload", e);
     }
   };
 
   const compressImage = async (imageUri, imageHeight, imageWidth) => {
-    ("imageHeight & Width", imageHeight, imageWidth);
-    ("i am trying to downscale image");
     if (imageUri !== null) {
       try {
-        ("lognr4");
+        console.log("lognr4");
 
         const manipResult = await ImageManipulator.manipulateAsync(
           imageUri,
@@ -107,7 +105,7 @@ const ImageUpload = () => {
         ("manipresult", manipResult.uri, manipResult.base64);
         setBase64(manipResult.base64);
       } catch (e) {
-        ("now what?", e);
+        console.log("now what?", e);
       }
     }
   };

@@ -63,12 +63,14 @@ const EditYourProfile = ({ navigation }) => {
     setPassword,
     bio,
     setBio,
+    path
+
   } = UseContextHook();
 
   let deleteUser = async () => {
     try {
       const deleteUser = await axios.delete(
-        `https://lestgo--coolasfk.repl.co/users`
+        `${path}users`
       );
       if (deleteUser) {
         navigation.navigate("WelcomeScreen");

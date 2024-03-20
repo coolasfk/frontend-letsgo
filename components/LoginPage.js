@@ -19,7 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import UserNameData from "./UserNameData";
 
 const LoginPage = ({ navigation, cta }) => {
-  let { email, setEmail, password, setPassword, userName, setUserName } =
+  let { email, setEmail, password, setPassword, userName, setUserName, path} =
     UseContextHook();
   const { height, width, scale, fontScale } = useWindowDimensions();
 
@@ -72,8 +72,10 @@ const LoginPage = ({ navigation, cta }) => {
 
     try {
       result = await axios.post(
-        "https://lestgo--coolasfk.repl.co/users/:email1/",
-        { email1: email, password: password }
+        //"https://lestgo--coolasfk.repl.co/users/:email1/",
+        `${path}users/:email1/`,
+        { email1: email, password: password },
+        { withCredentials: true }
       );
 
       if (result === null || undefined) {

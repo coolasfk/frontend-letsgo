@@ -18,7 +18,7 @@ import { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 const SendEmailToResetPassword = ({ navigation }) => {
-  let { email, setEmail, codeToResetPass, setCodeToResetPass } =
+  let { email, setEmail, codeToResetPass, setCodeToResetPass, path } =
     UseContextHook();
 
   let [text, setText] = useState("Type in your email to reset your password");
@@ -144,6 +144,7 @@ const SendEmailToResetPassword = ({ navigation }) => {
     try {
       const resetedPassword = await axios.post(
         "https://lestgo--coolasfk.repl.co/resetPass/",
+        `${path}resetPass/`,      
         { email: email }
       );
 

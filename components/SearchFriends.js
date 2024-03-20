@@ -33,6 +33,7 @@ const SearchFriends = ({ navigation }) => {
     userCity,
     setUserId,
     userId,
+    path
   } = UseContextHook();
 
   const yes = (id, newUser) => {
@@ -59,10 +60,10 @@ const SearchFriends = ({ navigation }) => {
   const putArrayWithMyFriendsIdOnTheServer = async (id) => {
     try {
       const result = await axios.patch(
-        `https://lestgo--coolasfk.repl.co/users/updateArrayFriends`,
+        //`https://lestgo--coolasfk.repl.co/users/updateArrayFriends`,
+        `${path}users/updateArrayFriends`,
         { newFriend: id }
       );
-
       "arrayWithMyFriendsId result", result.data;
     } catch (error) {
       "error putting data", error;
@@ -72,7 +73,6 @@ const SearchFriends = ({ navigation }) => {
   const no = (id) => {
     let newArray = fetchedUsers.filter((el) => el.id !== id);
     setpeopleIdontWannaSeeAgain([...peopleIdontWannaSeeAgain, id]);
-
     setFetchedUsers(newArray);
     peopleIdontWannaSeeAgainOnServer(id);
   };
@@ -80,7 +80,8 @@ const SearchFriends = ({ navigation }) => {
   const peopleIdontWannaSeeAgainOnServer = async (id) => {
     try {
       const result = await axios.patch(
-        `https://lestgo--coolasfk.repl.co/users/peopleIdontWannaSeeAgain`,
+        //`https://lestgo--coolasfk.repl.co/users/peopleIdontWannaSeeAgain`,
+        `${path}users/peopleIdontWannaSeeAgain`,
         { peopleIdontWannaSeeAgain: id }
       );
     } catch (error) {

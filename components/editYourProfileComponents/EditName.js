@@ -34,6 +34,7 @@ const EditName = ({ navigation }) => {
     setUserImage,
     userName,
     setUserName,
+    path
   } = UseContextHook();
 
   const [tempName, setTempName] = useState("");
@@ -53,7 +54,8 @@ const EditName = ({ navigation }) => {
   const updateNameServer = async () => {
     try {
       let updatedName = await axios.put(
-        "https://lestgo--coolasfk.repl.co/users/updateName/",
+        //"https://lestgo--coolasfk.repl.co/users/updateName/",
+        `${path}users/updateName/`,
         { name: tempName }
       );
       if (updatedName) {

@@ -18,7 +18,7 @@ import { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 const ResetPassPage = ({ navigation, cta }) => {
-  let { email, setEmail, password, setPassword } = UseContextHook();
+  let { email, setEmail, password, setPassword, path } = UseContextHook();
   const { height, width, scale, fontScale } = useWindowDimensions();
   let [password2, setPassword2] = useState("");
   const [displayPassword, setDisplayPassword] = useState("none");
@@ -52,7 +52,8 @@ const ResetPassPage = ({ navigation, cta }) => {
     try {
       if (password === password2) {
         const newPass = await axios.put(
-          "https://lestgo--coolasfk.repl.co/updatePassword/",
+          //"https://lestgo--coolasfk.repl.co/updatePassword/",
+          `${path}updatePassword/`,
           { email: email, password: password }
         );
         if (newPass) {

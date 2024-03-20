@@ -33,6 +33,7 @@ const EditLocation = ({ navigation }) => {
     setUserLocationServer,
     userCity,
     setUserCity,
+    path
   } = UseContextHook();
 
   const [tempLocation, setTempLocation] = useState("");
@@ -83,7 +84,8 @@ const EditLocation = ({ navigation }) => {
     "tempLocation", tempLocation;
     try {
       const updateLocation = await axios.put(
-        "https://lestgo--coolasfk.repl.co/users/updateLocation/",
+        //"https://lestgo--coolasfk.repl.co/users/updateLocation/",
+        `${path}users/updateLocation/`,
         { location: tempLocation }
       );
       if (updateLocation) {

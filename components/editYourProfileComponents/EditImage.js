@@ -34,6 +34,7 @@ const EditImage = ({ navigation }) => {
     base64,
     userImage,
     setUserImage,
+    path
   } = UseContextHook();
 
   const [tempUserImage, setTempUserImage] = useState(userImage);
@@ -131,7 +132,8 @@ const EditImage = ({ navigation }) => {
     ("base64", base64, "base64");
     try {
       const postUpdateImage = await axios.put(
-        "https://lestgo--coolasfk.repl.co/users/updateImage/",
+        //"https://lestgo--coolasfk.repl.co/users/updateImage/",
+        `${path}users/updateImage/`,
         { image: base64 }
       );
       if (postUpdateImage) {

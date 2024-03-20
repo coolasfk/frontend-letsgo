@@ -30,6 +30,7 @@ const EditName = ({ navigation }) => {
     setUser,
     bio,
     setBio,
+    path
   } = UseContextHook();
 
   const [tempName, setTempName] = useState("");
@@ -59,7 +60,8 @@ const EditName = ({ navigation }) => {
     console.log("trying to update bio addBio");
     try {
       let updatedBio = await axios.put(
-        "https://lestgo--coolasfk.repl.co/editYourProfile/addBio",
+        //"https://lestgo--coolasfk.repl.co/editYourProfile/addBio",
+       `${path}editYourProfile/addBio`,
         { bio: tempBio }
       );
       if (updatedBio) {
@@ -82,7 +84,8 @@ const EditName = ({ navigation }) => {
     console.log("trying to update bio updateBio");
     try {
       let updatedBio = await axios.put(
-        "https://lestgo--coolasfk.repl.co/users/addBio",
+        //"https://lestgo--coolasfk.repl.co/users/addBio",
+        `${path}users/addBio`,
         { bio: tempBio }
       );
       if (updatedBio) {
